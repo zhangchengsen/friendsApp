@@ -1,0 +1,84 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"app-plus":{
+				    "titleNView":{
+				        "searchInput":{
+				            "align":"center",			//剧中
+				            "backgroundColor":"#F5F4F2",		//背景颜色
+				            "borderRadius":"4px",			//边缘
+				            "disabled":true,			//禁用
+				            "placeholder":"搜索帖子",		//字
+				            "placeholderColor":"#6D6C67"        	//字颜色
+				        },
+				        "button":[
+				            {
+				                "color":"#333333",			// 字体颜色
+				                "colorPressed":"#bbbbbb",		// 按下颜色
+				                "float":"right",			// 浮动
+				                "fontSize":"20px",			// 字体大小
+				                "fontSrc":"/static/iconfont.ttf",
+									//字体文件       
+				                "text":"\ue668"			// button内容 注:unicode编码 前面是unicode    
+				            }        
+				        ]
+				    }
+				}
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+			}
+		},{
+			"path": "pages/msg/msg",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/news/news",
+			"style": {
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "友类",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar":{
+		"color":"#333",
+		"selectedColor":"#FC5C82",
+		"backgroundColor":"#FFFFFF",
+		"list":[
+			{
+				"text":"社区",
+				"iconPath":"/static/tab/aindex.png",
+				"selectedIconPath":"/static/tab/index.png",
+				"pagePath":"pages/index/index"
+			},
+			{
+				"text":"动态",
+				"iconPath":"/static/tab/search.png",
+				"selectedIconPath":"/static/tab/asearch.png",
+				"pagePath":"pages/news/news"
+			},
+			{
+				"text":"消息",
+				"iconPath":"/static/tab/msg.png",
+				"selectedIconPath":"/static/tab/amsg.png",
+				"pagePath":"pages/msg/msg"
+			},
+			{
+				"text":"我的",
+				"iconPath":"/static/tab/my.png",
+				"selectedIconPath":"/static/tab/amy.png",
+				"pagePath":"pages/my/my"
+			}
+		]
+		
+	}
+}

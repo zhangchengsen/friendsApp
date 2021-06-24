@@ -16,5 +16,7 @@
 	@import "./static/uni.css";
 	@import "./static/icon.css";
 	@import "./static/animate.min.css";
+	@import "./static/free.css"
+
 	/*每个页面公共css */
 </style>

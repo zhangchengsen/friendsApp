@@ -13,13 +13,13 @@
 				            "placeholder":"搜索帖子",		//字
 				            "placeholderColor":"#6D6C67"        	//字颜色
 				        },
-				        "button":[
+				        "buttons":[
 				            {
-				                "color":"#333333",			// 字体颜色
+				                "color":"#333",			// 字体颜色
 				                "colorPressed":"#bbbbbb",		// 按下颜色
 				                "float":"right",			// 浮动
 				                "fontSize":"20px",			// 字体大小
-				                "fontSrc":"/static/iconfont.ttf",
+				                "fontSrc":"/static/iconfonts.ttf",
 									//字体文件       
 				                "text":"\ue668"			// button内容 注:unicode编码 前面是unicode    
 				            }        

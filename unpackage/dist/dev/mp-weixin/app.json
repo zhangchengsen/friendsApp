@@ -19,30 +19,32 @@
     "list": [
       {
         "text": "社区",
-        "iconPath": "/static/tabbar/aindex.png",
-        "selectedIconPath": "/static/tabbar/index.png",
+        "iconPath": "/static/tab/aindex.png",
+        "selectedIconPath": "/static/tab/index.png",
         "pagePath": "pages/index/index"
       },
       {
         "text": "动态",
-        "iconPath": "/static/tabbar/search.png",
-        "selectedIconPath": "/static/tabbar/asearch.png",
+        "iconPath": "/static/tab/search.png",
+        "selectedIconPath": "/static/tab/asearch.png",
         "pagePath": "pages/news/news"
       },
       {
         "text": "消息",
-        "iconPath": "/static/tabbar/msg.png",
-        "selectedIconPath": "/static/tabbar/amsg.png",
+        "iconPath": "/static/tab/msg.png",
+        "selectedIconPath": "/static/tab/amsg.png",
         "pagePath": "pages/msg/msg"
       },
       {
         "text": "我的",
-        "iconPath": "/static/tabbar/my.png",
-        "selectedIconPath": "/static/tabbar/amy.png",
+        "iconPath": "/static/tab/my.png",
+        "selectedIconPath": "/static/tab/amy.png",
         "pagePath": "pages/my/my"
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {
+    "divider": "/components/common/divider",
+    "load-more": "/components/common/load_more"
+  }
 }

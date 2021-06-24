@@ -1,0 +1,1 @@
+<view style="height:56rpx;"><view style="text-align:center;line-height:56rpx;font-size:32rpx;">{{''+load+''}}</view></view>

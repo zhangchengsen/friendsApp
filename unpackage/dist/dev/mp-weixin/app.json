@@ -3,14 +3,15 @@
     "pages/index/index",
     "pages/my/my",
     "pages/msg/msg",
-    "pages/news/news"
+    "pages/news/news",
+    "pages/search/search"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "友类",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#F5F4F2",
+    "backgroundColor": "#F5F4F2"
   },
   "tabBar": {
     "color": "#333",
@@ -45,6 +46,7 @@
   },
   "usingComponents": {
     "divider": "/components/common/divider",
-    "load-more": "/components/common/load_more"
+    "load-more": "/components/common/load_more",
+    "nothing": "/components/common/nothing"
   }
 }

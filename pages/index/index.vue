@@ -2,17 +2,23 @@
 	<view style="margin-bottom: 30rpx;">
 		
 			<scroll-view scroll-x class="scroll-row" scroll-with-animation="true" :scroll-into-view="scrollInto" style="height: 100rpx;">
-				<view v-for="(item,index) in tabList" class="scroll-row-item px-2 py-2 font-md" :id = '"tab" + index'  @click="changeTab(index)"  :class = "activeIndex == index ? 'font-weight-bold font-lg active' : '' " :style =" activeIndex == index ? 'color:pink;': '' ">
+				<view v-for="(item,index) in tabList" :key = "index"  class="scroll-row-item px-2 py-2 font-md" :id = '"tab" + index' style="line-height: 60rpx;" @click="changeTab(index)"  :class = "activeIndex == index ? 'font-weight-bold font-lg active' : '' " :style =" activeIndex == index ? 'color:pink;': '' ">
 					{{item.name}}
 				</view>
 			</scroll-view>
 			<swiper :current = "activeIndex" @change = "swiperChange" :style=" 'height:' +swiperH +'px'  ">
 				<block v-for = "(item,index) in newsList" :key = "index">
-					<swiper-item >
-						<scroll-view scroll-y="true"  :style=" 'height:' +swiperH +'px' " @scrolltolower="toLoadMore(index)">
-							<commonList :userList = "item.list" @admire = "admire"  @follow ="follow"></commonList>
-							<loadMore :load = "item.loadMore"></loadMore>
-						</scroll-view>
+					<swiper-item>
+						<template v-if ="item.list.length > 0">
+							<scroll-view scroll-y="true"  :style=" 'height:' + swiperH +'px' " @scrolltolower="toLoadMore(index)">
+								<commonList :userList = "item.list" @admire = "admire"  @follow ="follow"></commonList>
+								<loadMore :load = "item.loadMore"></loadMore>
+							</scroll-view>
+						</template>
+						<template v-else>
+							<nothing></nothing>
+						</template>
+						
 					</swiper-item>
 				</block>
 			</swiper>
@@ -75,11 +81,21 @@
 			})
 			this.getData()
 		},
+		onNavigationBarSearchInputClicked() {
+			
+			uni.navigateTo({
+				url:"../search/search"
+			})
+			console.log(1)
+		}
+		,	
 		methods: {
+			
 			getData() {
 				let arr = []
 				for (var i = 0 ; i < this.tabList.length ; i ++)
 				{
+					
 					let obj = {
 						loadMore:'上拉加载更多',
 						list:[
@@ -130,6 +146,9 @@
 							},
 						]
 					}
+					if (i == 3) obj = {
+						list:[]
+					}
 					arr.push(obj)
 				}
 				this.newsList = arr
@@ -154,6 +173,7 @@
 					console.log(2)
 					if(e.type == 'support') support.support += 1
 					else support.unSupport += 1
+					support.type = e.type
 				}
 				else if(support.type == "support" && e.type == 'unSupport')
 				{

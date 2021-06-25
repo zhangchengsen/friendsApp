@@ -7,7 +7,7 @@
 				    "titleNView":{
 				        "searchInput":{
 				            "align":"center",			//剧中
-				            "backgroundColor":"#F5F4F2",		//背景颜色
+				            "backgroundColor":"#fff",		//背景颜色
 				            "borderRadius":"4px",			//边缘
 				            "disabled":true,			//禁用
 				            "placeholder":"搜索帖子",		//字
@@ -18,7 +18,7 @@
 				                "color":"#333",			// 字体颜色
 				                "colorPressed":"#bbbbbb",		// 按下颜色
 				                "float":"right",			// 浮动
-				                "fontSize":"20px",			// 字体大小
+				                "fontSize":"26rpx",			// 字体大小
 				                "fontSrc":"/static/iconfonts.ttf",
 									//字体文件       
 				                "text":"\ue668"			// button内容 注:unicode编码 前面是unicode    
@@ -41,13 +41,39 @@
 			"path": "pages/news/news",
 			"style": {
 			}
+		},
+		{
+			"path": "pages/search/search",
+			"style": {
+				"app-plus":{
+				    "titleNView":{
+				        "searchInput":{
+				            "align":"center",			//剧中
+				            "backgroundColor":"#fff",		//背景颜色
+				            "borderRadius":"4px",			//边缘
+				            "placeholder":"搜索帖子",		//字
+				            "placeholderColor":"#6D6C67"        	//字颜色
+				        },
+				        "buttons":[
+				            {
+				                "color":"#333",			// 字体颜色
+				                "colorPressed":"#bbbbbb",		// 按下颜色
+				                "float":"right",			// 浮动
+				                "fontSize":"26rpx",			// 字体大小
+									//字体文件       
+				                "text":"搜索"			// button内容 注:unicode编码 前面是unicode    
+				            }        
+				        ]
+				    }
+				}
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "友类",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#F5F4F2",
+		"backgroundColor": "#F5F4F2"
 	},
 	"tabBar":{
 		"color":"#333",

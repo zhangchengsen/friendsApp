@@ -1,6 +1,5 @@
 <template>
 	<view class="list">
-		
 		<block v-for="(item,index) in userList" :key = "index" >
 		<view class="user">
 			<view class="img_u" >

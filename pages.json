@@ -31,6 +31,7 @@
 		{
 			"path": "pages/my/my",
 			"style": {
+				
 			}
 		},{
 			"path": "pages/msg/msg",
@@ -40,6 +41,9 @@
 		{
 			"path": "pages/news/news",
 			"style": {
+				"app-plus":{
+					"titleNView":false
+				}
 			}
 		},
 		{

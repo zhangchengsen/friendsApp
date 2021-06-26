@@ -410,7 +410,6 @@ radio-group label, checkbox-group label{
 	content: '';
 	-webkit-transform: scaleY(.5);
 	transform: scaleY(.5);
-	background-color: #c8c7cc;
 }
 .uni-list .uni-list-cell:last-child::after {
 	height: 0rpx;

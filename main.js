@@ -5,9 +5,11 @@ Vue.config.productionTip = false
 import divider from 'components/common/divider.vue'
 import loadMore from 'components/common/load_more.vue'
 import nothing from 'components/common/nothing.vue'
+import upload_image from "components/common/upload_img.vue"
 Vue.component('divider',divider)
 Vue.component('loadMore',loadMore)
 Vue.component('nothing',nothing)
+Vue.component('uploadImage',upload_image)
 App.mpType = 'app'
 
 const app = new Vue({

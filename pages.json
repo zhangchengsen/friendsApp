@@ -67,6 +67,14 @@
 				    }
 				}
 			}
+		},
+		{
+			"path": "pages/public/public",
+			"style": {
+				"app-plus":{
+					"titleNView":false
+				}
+			}
 		}
 	],
 	"globalStyle": {

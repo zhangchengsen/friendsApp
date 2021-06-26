@@ -87,6 +87,11 @@
 				url:"../search/search"
 			})
 			console.log(1)
+		},
+		onNavigationBarButtonTap(e) {
+			uni.navigateTo({
+				url:'../public/public'
+			})
 		}
 		,	
 		methods: {

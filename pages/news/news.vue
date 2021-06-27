@@ -13,15 +13,51 @@
 		<!-- 轮播部分 -->
 		<template>
 			<swiper :current = "currentTab" @change = "swiperChange" :style=" 'height:' +scrollH +'px'  ">
-				<block v-for = "(item,index) in newsList"  :key = "index">
 					<swiper-item>
-						<scroll-view  @scrolltolower="toLoadMore(index)" scroll-y="true" :style=" 'height:' +scrollH +'px'  " >
-							<common-list :userList="item.list" @admire="admire" @follow = "follow"></common-list>
-							<loadMore :load = "item.loadMore"></loadMore>
-						</scroll-view>
+					<scroll-view  @scrolltolower="toLoadMore(0)" scroll-y="true" :style=" 'height:' +scrollH +'px'" >
+							<common-list :userList="newsList[0].list" @admire="admire" @follow = "follow"></common-list>
+							<loadMore :load = "newsList[0].loadMore"></loadMore>
+					</scroll-view>
 						
 					</swiper-item>
-				</block>
+						<scroll-view   scroll-y="true" :style=" 'height:' +scrollH +'px'  " >
+						</scroll-view>
+					<swiper-item>
+						<!-- 话题分页 -->
+						<scroll-view  @scrolltolower="toLoadMore(0)" scroll-y="true" :style=" 'height:' +scrollH +'px'" >
+						<cates :topics="topics"></cates>
+							<!-- 搜索框 -->
+						<view class="p-2" style="">
+							<view class="flex align-center justify-center rounded" style="background-color: #f5f4f2;height: 85rpx;">
+								<text class="iconfont icon-sousuo" style="color: #62615c;"></text>
+								<text class="ml-2" style="color: #62615c;">搜索话题</text>
+							</view>
+						</view>
+							<!-- 轮播图 -->
+							<swiper style="text-align: center;height: 300rpx;margin-bottom: 20rpx;" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
+							<block v-for="(item,index) in banner" :key = "index">
+								<swiper-item style="height: 300rpx;">
+									<image :src='item' class="rounded" style="height: 300rpx;width: 715rpx;"></image>
+								</swiper-item>
+							</block>
+							</swiper>
+							<!-- 分割线 -->
+							<divider></divider>
+							<!-- 话题列表 -->
+							<view class="p-2">
+								<view class="my-1 font-lg">
+									最近更新
+								</view>
+								<view class="">
+									<!-- 话题区域 -->
+									<block v-for="(item,index) in topicList" :key = "index">
+										<topics :item="item"></topics>
+									</block>
+								</view>
+							</view>
+							</scroll-view>
+					</swiper-item>
+					
 			</swiper>
 		</template>
 		
@@ -32,31 +68,60 @@
 <script>
 	import navBar from "../../static/uni-components/uni-nav-bar/uni-nav-bar.vue"
 	import commonList from '../../components/common/common.vue'
+	import cates from '../../components/common/cate.vue'
+	import topics from "../../components/common/topics.vue"
 	export default {
 		data() {
 			return {
 				tabList:['动态',"话题"],
 				currentTab:0,
 				scrollH:600,
-				newsList:[]
+				newsList:[],
+				topics:['关注','推荐','体育','热点','财经','娱乐'],
+				banner:['/static/images/banner3.jpg',"/static/images/banner2.jpg","/static/images/2.jpg"],
+				topicList:[]
 			}
 		},
-		
+		onLoad() {
+			this.getData()
+			this.getTopicList()
+		},
 		components:{
 			navBar,
-			commonList
+			cates,
+			commonList,
+			topics
 		},
 		mounted() {
-			this.getData()
 			let res = uni.getSystemInfo({
 				success: (res) => {
-					this.scrollH = res.windowHeight - res.statusBarHeight -44 - uni.upx2px(30)
-					console.log(this.scrollH)
+					this.scrollH = res.windowHeight - res.statusBarHeight -44 
 				}
 			})
 			
 		},
 		methods:{
+			//获取topicsList的数据
+			getTopicList() {
+				let arr = []
+				for(var i = 0 ; i < 10 ; i++)
+				{
+					let obj = {
+						topicName:"#话题名称哈哈哈哈",
+						topicDesc:"话题描述",
+						news:42,
+						news_today:0
+					}
+					if(i == 3 || i ==4)
+					{
+						obj.topicDesc = "??????????"
+						obj.news = 23
+						obj.news_today = 4
+					}
+					arr.push(obj);
+				}
+				 this.topicList = arr;
+			},
 			// 获取假数据
 			getData() {
 				let arr = []
@@ -112,10 +177,10 @@
 							},
 						]
 					}
+				
 					arr.push(obj)
 				}
 				this.newsList = arr;
-				console.log(this.newsList)
 			},
 			// 改变tab栏
 			clickTab(index) {
@@ -132,20 +197,17 @@
 				if(support.type == e.type) return 
 				else if(!support.type)
 				{
-					console.log(2)
 					if(e.type == 'support') support.support += 1
 					else support.unSupport += 1
 					support.type = e.type
 				}
 				else if(support.type == "support" && e.type == 'unSupport')
 				{
-					console.log(3)
 					support.support -= 1
 					support.unSupport += 1
 					support.type = 'unSupport'
 				}
 				else if(support.type == "unSupport" && e.type == "support"){
-					console.log(4)
 					support.support += 1
 					support.unSupport -= 1
 					support.type = 'support'

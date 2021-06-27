@@ -64,8 +64,7 @@
 			return {
 			}
 		},
-		onLoad() {
-
+		mounted() {
 		},
 		methods: {
 			//关注
@@ -81,23 +80,18 @@
 			},
 			//踩
 			unAdmire(index) {
-				console.log('踩')
 			},
 			//用户详情
 			user_detail() {
-				console.log('用户详情')
 			},
 			//文章详情
 			passage() {
-				console.log('文章详情')
 			},
 			// 评论
 			remark () {
-				console.log('评论')
 			},
 			//分享
 			share() {
-				console.log("分享")
 			}
 			
 		}

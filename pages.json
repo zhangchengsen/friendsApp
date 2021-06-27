@@ -79,6 +79,27 @@
 					"titleNView":false
 				}
 			}
+		},
+		{
+			"path": "pages/cates/cates",
+			"style": {
+				"app-plus":{
+					"titleNView":false
+				}
+			}
+		},
+		{
+			"path": "pages/detail/detail",
+			"style": {
+				"app-plus":{
+					"titleNView":{
+						"type":"transparent",
+						"buttons":[{
+							"type":"menu"
+						}]
+					}
+				}
+			}
 		}
 	],
 	"globalStyle": {

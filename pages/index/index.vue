@@ -75,7 +75,7 @@
 		onLoad() {
 			let res = uni.getSystemInfo({
 				success: (res) => {
-					this.swiperH = res.windowHeight - uni.upx2px(100)
+					this.swiperH = res.windowHeight - uni.upx2px(100) - res.statusBarHeight 
 					
 				}
 			})
@@ -86,7 +86,6 @@
 			uni.navigateTo({
 				url:"../search/search"
 			})
-			console.log(1)
 		},
 		onNavigationBarButtonTap(e) {
 			uni.navigateTo({
@@ -175,20 +174,17 @@
 				if(support.type == e.type) return 
 				else if(!support.type)
 				{
-					console.log(2)
 					if(e.type == 'support') support.support += 1
 					else support.unSupport += 1
 					support.type = e.type
 				}
 				else if(support.type == "support" && e.type == 'unSupport')
 				{
-					console.log(3)
 					support.support -= 1
 					support.unSupport += 1
 					support.type = 'unSupport'
 				}
 				else if(support.type == "unSupport" && e.type == "support"){
-					console.log(4)
 					support.support += 1
 					support.unSupport -= 1
 					support.type = 'support'

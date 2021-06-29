@@ -35,7 +35,35 @@
 			}
 		},{
 			"path": "pages/msg/msg",
+			
 			"style": {
+				"navigationBarTitleText":"消息列表",
+				"enablePullDownRefresh":true,
+				"app-plus":{
+				    "titleNView":{
+				        
+				        "buttons":[
+				            {
+				                "color":"#333",			// 字体颜色
+				                "colorPressed":"#bbbbbb",		// 按下颜色
+				                "float":"left",			// 浮动
+				                "fontSize":"30rpx",			// 字体大小
+				                "fontSrc":"/static/iconfonts.ttf",
+									//字体文件       
+				                "text":"\ue611"			// button内容 注:unicode编码 前面是unicode    
+				            },
+							{
+								"color":"#333",			// 字体颜色
+								"colorPressed":"#bbbbbb",		// 按下颜色
+								"float":"right",			// 浮动
+								"fontSize":"30rpx",			// 字体大小
+								"fontSrc":"/static/iconfonts.ttf",
+									//字体文件       
+								"text":"\ue649"
+							}
+				        ]
+				    }
+				}
 			}
 		},
 		{
@@ -98,6 +126,42 @@
 							"type":"menu"
 						}]
 					}
+				}
+			}
+		},
+		{
+			"path": "pages/user-list/user-list",
+			"style": {
+				"app-plus":{
+					"animationType":"slide-in-left",
+				    "titleNView":{
+						"autoBackButton":false,
+				        "searchInput":{
+				            "backgroundColor":"#fff",		//背景颜色
+				            "borderRadius":"4px",			//边缘
+				            "disabled":true,			//禁用
+				            "placeholder":"搜索",		//字
+				            "placeholderColor":"#6D6C67"        	//字颜色
+				        },
+				        "buttons":[
+				            {
+				                "color":"#333",			// 字体颜色
+				                "colorPressed":"#bbbbbb",		// 按下颜色
+				                "float":"right",			// 浮动
+				                "fontSize":"26rpx",			// 字体大小
+									//字体文件       
+				                "text":"取消"			// button内容 注:unicode编码 前面是unicode    
+				            }        
+				        ]
+				    }
+				}
+			}
+		},
+		{
+			"path": "pages/user-msg/user-msg",
+			"style": {
+				"app-plus":{
+				    "titleNView":false
 				}
 			}
 		}

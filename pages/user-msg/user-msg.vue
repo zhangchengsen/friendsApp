@@ -1,8 +1,8 @@
 <template>
-	<view>
+	<view class="m-1">
 		<!-- 导航头部 -->
-		<uni-nav-bar style="height: 100rpx;">
-			<text slot="left" class="iconfont icon-fanhui text-center ml-2"  @click="navBack"></text>
+		<uni-nav-bar style="height: 100rpx;" class="">
+			<text slot="left" class="iconfont icon-fanhui text-center "  @click="navBack"></text>
 			<view class="w-100 flex align-center justify-center">
 				消息
 			</view>
@@ -11,6 +11,7 @@
 		<!-- scroll消息内容 -->
 		<scroll-view scroll-y="true"  class="" style="position: absolute;top: 100rpx;left: 0;right: 0;bottom: 100rpx;" scroll-with-animation="true" :scroll-into-view="scrollInto">
 			<block v-for="(item,index) in chatList" :key="index">
+				<!-- 消息组件 -->
 				<view :id = '"tab" + index'>
 					
 					<cpn-msg-chat  :item = "item" :preTime = " index ? chatList[index - 1].create_time: 0  " ></cpn-msg-chat>		
@@ -20,24 +21,19 @@
 			
 		</scroll-view>
 		<!-- 底部发送消息 -->
-		<view class="fixed-bottom flex border-top">
-			<view class=" w-100 m-2 flex align-center justify-center" >
-				<input type="text" v-model = "inputVal" placeholder="写点什么给你的朋友吧" style="background-color: #F7F7F7;" class="w-100 p-1 rounded"  value="" />
-			</view>
-			<view @click="send" class="animated iconfont icon-fabu flex align-center justify-center font-md mr-2" hover-class="pulse">
-				
-			</view>
-		</view>
+		<bottom-input @send = "send"></bottom-input>
 	</view>
 </template>
 
 <script>
+	import bottomInput from '@/components/msg/bottom_input.vue'
 	import cpnMsgChat from '@/components/msg/cpn-msg-chat.vue'
 	import uniNavBar from '@/static/uni-components/uni-nav-bar/uni-nav-bar.vue'
 	export default{
 		components:{
 			uniNavBar,
-			cpnMsgChat
+			cpnMsgChat,
+			bottomInput
 		},
 		onLoad(e)
 		{
@@ -61,13 +57,16 @@
 		methods:{
 			// 滚动
 			toButtom() {
-				if(this.chatList.length < 1) return 
+				setTimeout(()=>{
+					if(this.chatList.length < 1) return
+					this.scrollInto = 'tab' + (this.chatList.length - 1)
+					console.log(this.scrollInto)
+				},600)
 				
-				this.scrollInto = 'tab' + (this.chatList.length - 1)
-				console.log(this.scrollInto)
 			},
 			// 发送信息
-			send() {
+			send(e) {
+				this.inputVal = e.inputVal
 				if(this.inputVal.trim() == '') return 
 				let obj = {
 					user_id:1,

@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<view class="flex align-center justify-center" v-if = "item" >
+		<view class="flex align-center justify-center" v-if = "item.type != 'remark' " >
 			{{getTime}}
 		</view>
 		<view class="flex m-2 p-1" :class="item.user_id ? 'flex-row-reverse' : '' ">
@@ -35,8 +35,12 @@
 		computed:
 		{
 			getTime() {
+				if(this.item.type == 'remark') return 
 				return $T.getChatTime(this.item.create_time,this.preTime)
 			}
+		},
+		mounted() {
+			console.log(this. item)
 		}
 			
 	}

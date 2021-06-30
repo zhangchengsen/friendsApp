@@ -84,7 +84,7 @@
 		onNavigationBarSearchInputClicked() {
 			
 			uni.navigateTo({
-				url:"../search/search"
+				url:"../search/search?type=tieZi"
 			})
 		},
 		onNavigationBarButtonTap(e) {

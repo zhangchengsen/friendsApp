@@ -28,8 +28,8 @@
 						<cates :topics="topics"></cates>
 							<!-- 搜索框 -->
 						<view class="p-2" style="">
-							<view class="flex align-center justify-center rounded" style="background-color: #f5f4f2;height: 85rpx;">
-								<text class="iconfont icon-sousuo" style="color: #62615c;"></text>
+							<view @click="toSearch" class="flex align-center justify-center rounded" style="background-color: #f5f4f2;height: 85rpx;">
+								<text  class="iconfont icon-sousuo" style="color: #62615c;"></text>
 								<text class="ml-2" style="color: #62615c;">搜索话题</text>
 							</view>
 						</view>
@@ -101,6 +101,12 @@
 			
 		},
 		methods:{
+			// 跳转到搜索
+			toSearch() {
+				uni.navigateTo({
+					url:'../search/search?type=topic'
+				})
+			},
 			//获取topicsList的数据
 			getTopicList() {
 				let arr = []

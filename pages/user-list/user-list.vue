@@ -11,6 +11,16 @@
 <script>
 	import cpnUserList from '@/components/msg/cpn-user-list.vue'
 	export default{
+		onNavigationBarButtonTap() {
+			uni.navigateBack({
+				delta: 1
+			});
+		},
+		onNavigationBarSearchInputClicked() {
+			uni.navigateTo({
+				url:"../search/search?" + 'type=user'
+			})
+		},
 		data() {
 			return {
 				dataList:[]

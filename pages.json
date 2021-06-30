@@ -31,7 +31,16 @@
 		{
 			"path": "pages/my/my",
 			"style": {
-				
+				"navigationBarTitleText":"我的",
+				"app-plus":{
+				    "titleNView":{
+				        "buttons":[
+				            {
+				                "type":"menu"
+				            }        
+				        ]
+				    }
+				}
 			}
 		},{
 			"path": "pages/msg/msg",
@@ -162,6 +171,30 @@
 			"style": {
 				"app-plus":{
 				    "titleNView":false
+				}
+			}
+		},
+		{
+			"path": "pages/common_detail/common_detail",
+			"style": {
+				"app-plus":{
+				    "titleNView":{
+						"buttons":[
+						{
+							"type":"menu",
+							"float":"right"
+						}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/user-set/user-set",
+			"style": {
+				"navigationBarTitleText":"设置",
+				"app-plus":{
+				    
 				}
 			}
 		}

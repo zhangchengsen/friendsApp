@@ -35,7 +35,9 @@
 					</view>
 				</slot>
 			</view>
+			<slot name="rightIcon">
 			<uni-icons v-if="showArrow || link" :size="16" class="uni-icon-wrapper" color="#bbb" type="arrowright" />
+			</slot>
 		</view>
 		<!-- #ifdef APP-NVUE -->
 	</cell>
@@ -315,11 +317,12 @@ $list-item-pd: $uni-spacing-col-lg $uni-spacing-row-lg;
 	display: flex;
 	/* #endif */
 	padding-right: 8px;
+
 	flex: 1;
 	color: #3b4144;
 	// overflow: hidden;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: center;
 	overflow: hidden;
 }
 

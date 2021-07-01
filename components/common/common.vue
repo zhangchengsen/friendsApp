@@ -1,10 +1,10 @@
 <template>
-	<view class="list">
+	<view class="list animated fadeIn faster">
 		<block v-for="(item,index) in userList" :key = "index" >
-		<view class="" @click="navTo(item)">
+		<view class="" @click.stop="navTo(item)">
 			<view class="user">
 				<view class="img_u" >
-						<image :src="item.user_pic" @click="user_detail" ></image>
+						<image :src="item.user_pic"  @click.stop="toZone"></image>
 					<view class="name_time">
 						<view class="name">
 							{{item.username}}
@@ -14,7 +14,7 @@
 						</view>
 					</view>
 				</view>
-				<view v-if = "!item.follow"  class="button animated animate__fast" hover-class="pulse" @click = "follow(index)">
+				<view v-if = "!item.follow"  class="button animated animate__fast" hover-class="pulse" @click.stop = "follow(index)">
 					关注
 				</view>
 				<view v-else style="color:#FFFFFF">
@@ -33,12 +33,12 @@
 			<!-- 文字图标 -->
 			<view class="flex m-2">
 				<!-- 支持 -->
-				<view class="flex flex-1 justify-center p-1 animated" hover-class="rubberBand" @click="operation('support',index)" :style=" item.support.type == 'support' ? 'color:pink;' : ''   ">
+				<view class="flex flex-1 justify-center p-1 animated" hover-class="rubberBand" @click.stop="operation('support',index)" :style=" item.support.type == 'support' ? 'color:pink;' : ''   ">
 					<text class="iconfont icon-dianzan2 " style="margin-top:7rpx;" ></text>
 					<text class="ml-1">{{item.support.support}}</text>
 				</view>
 				<!-- 踩 -->
-				<view class="flex flex-1 justify-center p-1 animated " hover-class="swing" @click="operation('unSupport',index)" :style=" item.support.type == 'unSupport' ? 'color:pink;' : ''   ">
+				<view class="flex flex-1 justify-center p-1 animated " hover-class="swing" @click.stop="operation('unSupport',index)" :style=" item.support.type == 'unSupport' ? 'color:pink;' : ''   ">
 					<text class="iconfont icon-cai" style="margin-top:7rpx;"></text>
 					<text class="ml-1">{{item.support.unSupport}}</text>
 				</view>
@@ -73,6 +73,12 @@
 		mounted() {
 		},
 		methods: {
+			// 到个人空间
+			toZone() {
+				uni.navigateTo({
+					url:'../../pages/zone/zone'
+				})
+			},
 			// 到详情页
 			navTo(data) {
 				if(this.type) return

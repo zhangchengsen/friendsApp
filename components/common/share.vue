@@ -1,58 +1,55 @@
 <template>
-	<uni-popup ref="popup"  type="bottom" style="z-index: 9998;">
-		<view class="p-2 text-center" style="background-color: #fff;border-bottom:1rpx solid #fff">
-			分享到↓
-		</view>
-		<!-- <view class=" flex align-center justify-center py-2" style="background-color: #fff;">
-			
-			<view class="flex align-center">
-				<block v-for="(item,index) in  providerList" :key = 'index'>
-					
-					<view class="flex-1 flex align-center justify-center flex-column mx-2" @tap="share(index)">
-						<view class="iconfont bg-primary text-white   font-lg flex align-center justify-center" :class="item.icon + ' ' + item.color "  style="border-radius: 50%;width: 100rpx;height: 100rpx;" >
-						</view>
-						<view class="w-100 text-ellipsis">{{item.name}}</view>
-					</view>
-				</block>
-				
+	<view>
+		<page-head :title="title"></page-head>
+		<view class="uni-padding-wrap">
+			<view class="uni-title">分享内容</view>
+			<view class="uni-textarea">
+				<textarea class="textarea" v-model="shareText" />
+				</view>
+			<view class="uni-title">分享图片：</view>
+			<view class="uni-uploader" style="padding:15rpx; background:#FFF;">
+				<view class="uni-uploader__input-box" v-if="!image" @tap="chooseImage"></view>
+				<image class="uni-uploader__img" v-if="image" :src="image"></image>
 			</view>
-		</view> -->
-		
-		<!-- icon:'icon-weixin', -->
-		<!-- color:'bg-success', -->
+			<!-- #ifdef APP-PLUS -->
+			<view class="uni-title">分享类型：</view>
 			<view>
-				<!-- #ifdef APP-PLUS -->
-				
-				<view class="  flex bg-white" v-if="providerList.length > 0">
-					<block v-for="(value,index) in providerList" :key="index">
-						<view style="" v-if="value" :disabled="isDisableButton(value)" @tap="share(value)" class=" flex-1 flex-column flex align-center  justify-center bg-white">
-							
-							<view  style="height: 80rpx;width: 80rpx;" class="iconfont rounded-circle flex align-center justify-center" :class="value.icon +' '+'bg-'+value.color "  >
-							</view>
-							<text>{{value.name}}</text>
-						</view>
-					</block>
-				</view>
-				<!-- #endif -->
-				<!-- #ifdef MP || QUICKAPP-WEBVIEW -->
-				<view class="">
-					<button type="primary" open-type="share">分享</button>
-				</view>
-				<!-- #endif -->
+				<radio-group @change="radioChange">
+					<label class="radio">
+						<radio value="1" checked="true"/>文字
+					</label>
+					<label class="radio">
+						<radio value="2" />图片
+					</label>
+					<label class="radio">
+						<radio value="0" />图文
+					</label>
+					<label class="radio">
+						<radio value="5" />小程序
+					</label>
+				</radio-group>
 			</view>
-			<view class="bg-white flex align-center justify-center" style="height: 80rpx;" @click="close">
-				关闭
+			<view class="uni-btn-v uni-common-mt" v-if="providerList.length > 0">
+				<block v-for="(value,index) in providerList" :key="index">
+					<button type="primary" v-if="value" :disabled="isDisableButton(value)" @tap="share(value)">{{value.name}}</button>
+				</block>
 			</view>
-	</uni-popup>
+			<!-- #endif -->
+			<!-- #ifdef MP || QUICKAPP-WEBVIEW -->
+			<view class="uni-btn-v uni-common-mt">
+				<button type="primary" open-type="share">分享</button>
+			</view>
+			<!-- #endif -->
+		</view>
+	</view>
 </template>
-
 <script>
 	export default {
 		data() {
 			return {
 				title: 'share',
-				shareText: '电商后台管理系统 账号admin 密码123456',
-				href:"http://39.96.217.68/#/login",
+				shareText: 'uni-app可以同时发布成原生App、小程序、H5，邀请你一起体验！',
+				href:"https://uniapp.dcloud.io",
 				image: '',
 				shareType:1,
 				providerList: []
@@ -78,12 +75,12 @@
 				imageUrl:this.image ? this.image : 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/b6304f00-5168-11eb-bd01-97bc1429a9ff.png'
 			}
 		},
-		beforeDestroy:function(){
-			this.shareText='电商后台管理系统 账号admin 密码123456！',
-			this.href = 'http://39.96.217.68/#/login',
+		onUnload:function(){
+			this.shareText='uni-app可以同时发布成原生App、小程序、H5，邀请你一起体验！',
+			this.href = 'https://uniapp.dcloud.io',
 			this.image='';
 		},
-		beforeMount: function () {
+		onLoad: function () {
 			uni.getProvider({
 				service: 'share',
 				success: (e) => {
@@ -93,16 +90,12 @@
 						switch (e.provider[i]) {
 							case 'weixin':
 								data.push({
-									icon:'icon-weixin',
-									color:'success',
-									name: '微信好友',
+									name: '分享到微信好友',
 									id: 'weixin',
 									sort:0
 								})
 								data.push({
-									icon:'icon-faxian',
-									color:'success',
-									name: '朋友圈',
+									name: '分享到微信朋友圈',
 									id: 'weixin',
 									type:'WXSenceTimeline',
 									sort:1
@@ -110,18 +103,14 @@
 								break;
 							case 'sinaweibo':
 								data.push({
-									icon:"icon-xinlangweibo",
-									color:'danger',
-									name: '新浪微博',
+									name: '分享到新浪微博',
 									id: 'sinaweibo',
 									sort:2
 								})
 								break;
 							case 'qq':
 								data.push({
-									icon:"icon-QQ",
-									color:'primary',
-									name: 'QQ好友',
+									name: '分享到QQ',
 									id: 'qq',
 									sort:3
 								})
@@ -144,13 +133,6 @@
 			});
 		},
 		methods: {
-			open() {
-				this.$refs.popup.open()
-			},
-			close() {
-				this.$refs.popup.close()
-			}
-			,
 			async share(e) {
 				console.log('分享通道:'+ e.id +'； 分享类型:' + this.shareType);
 				
@@ -197,8 +179,8 @@
 					case 0:
 						shareOPtions.summary = this.shareText;
 						shareOPtions.imageUrl = this.image;
-						shareOPtions.title = '电商后台管理系统';
-						shareOPtions.href = 'http://39.96.217.68/#/login';
+						shareOPtions.title = '欢迎体验uniapp';
+						shareOPtions.href = 'https://uniapp.dcloud.io';
 						break;
 					case 1:
 						shareOPtions.summary = this.shareText;
@@ -208,11 +190,11 @@
 						break;
 					case 5:
 						shareOPtions.imageUrl = this.image ? this.image : 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/b6304f00-5168-11eb-bd01-97bc1429a9ff.png'
-						shareOPtions.title = '电商后台管理系统';
+						shareOPtions.title = '欢迎体验uniapp';
 						shareOPtions.miniProgram = {
 							id:'gh_33446d7f7a26',
 							path:'/pages/tabBar/component/component',
-							webUrl:'http://39.96.217.68/#/login',
+							webUrl:'https://uniapp.dcloud.io',
 							type:0
 						};
 						break;
@@ -224,8 +206,8 @@
 					shareOPtions.imageUrl = await this.compress();
 				}
 				if(shareOPtions.type === 1 && shareOPtions.provider === 'qq'){//如果是分享文字到qq，则必须加上href和title
-					shareOPtions.href = 'http://39.96.217.68/#/login';
-					shareOPtions.title = '电商后台管理系统';
+					shareOPtions.href = 'https://uniapp.dcloud.io';
+					shareOPtions.title = '欢迎体验uniapp';
 				}
 				uni.share(shareOPtions);
 			},
@@ -299,7 +281,7 @@
 							content:'分享图片太大,需要请重新选择图片!',
 							showCancel:false
 						})
-					})
+					});
 				})
 			}
 		}
@@ -307,4 +289,5 @@
 </script>
 
 <style>
+
 </style>

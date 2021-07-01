@@ -1,8 +1,8 @@
 <template>
 <!-- 关联导航 -->
-    <view>
+    <view class="animated fadeIn ">
 		<!-- loadMore -->
-		<cpn-user-list :dataList = "dataList" @index = "getIndex"   ></cpn-user-list>
+		<cpn-user-list  :dataList = "dataList" @index = "getIndex"   ></cpn-user-list>
     </view>
 
 </template>

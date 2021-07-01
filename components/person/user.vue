@@ -12,7 +12,7 @@
 						15641651654
 					</view>
 					<view class="font-md" style="color: #484742;margin-top: 5rpx;"  >
-						总帖子 1 今日发帖
+						总帖子 1 今日发帖 0
 					</view>
 				</view>
 				<view class="iconfont icon-jinru font-md">

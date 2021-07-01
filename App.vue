@@ -2,6 +2,8 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
+			this.$U.onNetwork()
+			this.$U.update()
 		},
 		onShow: function() {
 			console.log('App Show')

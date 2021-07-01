@@ -197,6 +197,77 @@
 				    
 				}
 			}
+		},
+		{
+			"path": "pages/changePwd/changePwd",
+			"style": {
+				"navigationBarTitleText":"修改密码",
+				"app-plus":{
+				    
+				}
+			}
+		},
+		{
+			"path": "pages/email/email",
+			"style": {
+				"navigationBarTitleText":"绑定邮箱",
+				"app-plus":{
+				    
+				}
+			}
+		},
+		{
+			"path": "pages/userInfo/userInfo",
+			"style": {
+				"navigationBarTitleText":"个人资料",
+				"app-plus":{
+				    
+				}
+			}
+		},
+		{
+			"path": "pages/suggest/suggest",
+			"style": {
+				"navigationBarTitleText":"意见反馈",
+				"app-plus":{
+				    
+				}
+			}
+		},
+		{
+			"path": "pages/about/about",
+			"style": {
+				"navigationBarTitleText":"关于我们",
+				"app-plus":{
+				    
+				}
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"app-plus":
+				{
+					"titleNView":false
+				}
+			}
+		},
+		{
+			"path": "pages/zone/zone",
+			"style": {
+				"navigationBarTitleText":"个人空间",
+				"app-plus":
+				{
+					"titleNView":{
+						"buttons":[
+						{
+							"type":"menu",
+							"float":"right"
+						}
+						]
+					}
+				}
+			}
 		}
 	],
 	"globalStyle": {

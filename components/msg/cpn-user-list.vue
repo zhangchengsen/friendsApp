@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<view class="flex align-center " style="justify-content: space-around;height: 100rpx;" >
+	<view class="">
+		<view class="flex align-center  " style="justify-content: space-around;height: 100rpx;" >
 			
 			<view v-for="(item,index) in tabList" :key = "index"  class=" scroll-row-item px-2 py-2 " :id = '"tab" + index' style="line-height: 60rpx;" @click="changeTab(index)"  :class = "curIndex == index ? 'font-weight-bold font-lg active' : 'font-md' " :style =" curIndex == index ? 'color:pink;': '' ">
 				{{item.name}}

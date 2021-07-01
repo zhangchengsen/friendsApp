@@ -4,7 +4,7 @@
 			<view class="">
 				
 				<view class=" m-2 p-2 text-left rounded" style="background-color: #EEEEEE;">
-					内容啊啊啊啊扩多军奥扩多军爱偶多军奥搜ID骄傲搜我加大搜我煎熬时间的awdawd;awidjawkd文件袋的骄傲我jawID节哀就打我我金无怠嘉爱爱神的箭阿斯 加速面积卅
+					{{content}}
 				</view>
 				<block v-for="(item,index) in imageList" :key = "index" >
 					<image :src="item"  @click = 'preview(index)' ></image>
@@ -20,7 +20,7 @@
 		</block>
 		</template>
 		<bottom-input @send = "send"></bottom-input>
-		<cpn-detail-share ref = "pop"></cpn-detail-share>
+		<cpn-detail-share ref = "share"></cpn-detail-share>
 	</view>
 </template>
 
@@ -48,12 +48,19 @@
 				info:{},
 				inputVal:"",
 				remarkList:[],
-				imageList:['/static/images/11.jpg','/static/images/12.jpg','/static/images/10.jpg']
+				imageList:['/static/images/11.jpg','/static/images/12.jpg','/static/images/10.jpg'],
+				content:'内容啊啊啊啊扩多军奥扩多军爱偶多军奥搜ID骄傲搜我加大搜我煎熬时间的awdawd;aw djawkd文件袋的骄傲我jawID节哀就打我我金无怠嘉爱爱神的箭阿斯 加速面积卅'
 			}
 		},
 		onNavigationBarButtonTap(e) {
 			if(e.index != 0) return 
-			this.$refs.pop.open()
+			this.$refs.share.open()
+			// {
+			// 	title:this.passageData.title,
+			// 	shareText:this.content,
+			// 	href:"http://www.dishaxy.com",
+			// 	image:'/static/images/easy.jpg'
+			// }
 		}
 		,
 		methods:{

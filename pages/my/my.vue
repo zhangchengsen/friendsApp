@@ -10,7 +10,6 @@
 	import list from '@/components/person/list.vue'
 	export default {
 		onNavigationBarButtonTap() {
-			console.log(1)
 			uni.navigateTo({
 				url:'../user-set/user-set'
 			})

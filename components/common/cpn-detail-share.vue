@@ -3,23 +3,7 @@
 		<view class="p-2 text-center" style="background-color: #fff;border-bottom:1rpx solid #fff">
 			分享到↓
 		</view>
-		<!-- <view class=" flex align-center justify-center py-2" style="background-color: #fff;">
-			
-			<view class="flex align-center">
-				<block v-for="(item,index) in  providerList" :key = 'index'>
-					
-					<view class="flex-1 flex align-center justify-center flex-column mx-2" @tap="share(index)">
-						<view class="iconfont bg-primary text-white   font-lg flex align-center justify-center" :class="item.icon + ' ' + item.color "  style="border-radius: 50%;width: 100rpx;height: 100rpx;" >
-						</view>
-						<view class="w-100 text-ellipsis">{{item.name}}</view>
-					</view>
-				</block>
-				
-			</view>
-		</view> -->
 		
-		<!-- icon:'icon-weixin', -->
-		<!-- color:'bg-success', -->
 			<view>
 				<!-- #ifdef APP-PLUS -->
 				
@@ -54,7 +38,7 @@
 				shareText: '电商后台管理系统 账号admin 密码123456',
 				href:"http://39.96.217.68/#/login",
 				image: '',
-				shareType:1,
+				shareType:0,
 				providerList: []
 			}
 		},
@@ -144,7 +128,15 @@
 			});
 		},
 		methods: {
-			open() {
+			open(e) {
+				this.shareText = e.shareText
+				this.image = e.image
+				this.href = e.href || 'http://39.96.217.68/#/login'
+				this.title = e.title
+				console.log(this.shareText)
+				console.log(this.image)
+				console.log(this.href)
+				console.log(this.title)
 				this.$refs.popup.open()
 			},
 			close() {
@@ -197,8 +189,8 @@
 					case 0:
 						shareOPtions.summary = this.shareText;
 						shareOPtions.imageUrl = this.image;
-						shareOPtions.title = '电商后台管理系统';
-						shareOPtions.href = 'http://39.96.217.68/#/login';
+						shareOPtions.title = this.title;
+						shareOPtions.href = this.href;
 						break;
 					case 1:
 						shareOPtions.summary = this.shareText;
@@ -208,11 +200,11 @@
 						break;
 					case 5:
 						shareOPtions.imageUrl = this.image ? this.image : 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/b6304f00-5168-11eb-bd01-97bc1429a9ff.png'
-						shareOPtions.title = '电商后台管理系统';
+						shareOPtions.title = this.title;
 						shareOPtions.miniProgram = {
 							id:'gh_33446d7f7a26',
 							path:'/pages/tabBar/component/component',
-							webUrl:'http://39.96.217.68/#/login',
+							webUrl:this.href,
 							type:0
 						};
 						break;
@@ -224,8 +216,8 @@
 					shareOPtions.imageUrl = await this.compress();
 				}
 				if(shareOPtions.type === 1 && shareOPtions.provider === 'qq'){//如果是分享文字到qq，则必须加上href和title
-					shareOPtions.href = 'http://39.96.217.68/#/login';
-					shareOPtions.title = '电商后台管理系统';
+					shareOPtions.href = this.href;
+					shareOPtions.title = this.title;
 				}
 				uni.share(shareOPtions);
 			},

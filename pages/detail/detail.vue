@@ -27,8 +27,7 @@
 				</view>
 			</block>
 		</view>
-		
-		<!-- <common-list v-if="activeIndex == 0" :userList="newsList[activeIndex].list"@admire = "admire"  @follow ="follow"></common-list> -->
+
 		<template v-if = "listData.length > 0">
 			<common-list v-if="activeIndex == 0" :userList="listData" @admire = "admire"  @follow ="follow"></common-list>
 			<loadMore :load = "loadText"></loadMore>
@@ -56,66 +55,40 @@
 			commonList
 		},
 		onLoad(e) {
-			this.getData()
 			this.msg = JSON.parse(e.detail)
+			this.getData()
+			console.log(this.msg)
 		},
 		methods:{
 			changeTab(index){
 				this.activeIndex = index;
+				if(!this['firstLoad' + index]) this.getData()
 			},
 			getData() {
-				
+				let id = this.msg.id
+				let index = this.activeIndex +1
+				this.$http.get( '/topic/' + id +'/post/'+ this[ 'page' + index ] ).then(res=>{
+					let list = res.list.map(v=>{
+						return this.$U.helper(v)
+					})
+					if(this['firstLoad' + index])
+					{
+						this['list' + index ] = [...this['list' + index ],...list]
+					}
+					else
+					{
+						this['firstLoad' + index] = true
+						this['list' + index] = list
+						
+					}
+					if(list.length < 10) this[' loadMore'  + index] = '没有更多了'
+					else this[' loadMore'  + index] = '上拉加载更多'
 					
-						let list=[
-							{
-								follow:false,
-								username:'云梦他乡',
-								time:"2020-6-23 晚上 8.29",
-								user_pic:"/static/images/2.jpg",
-								title:"很随意的标题",
-								title_pic:"/static/images/5.jpg",
-								support:{
-									type:"support",
-									support:2,
-									unSupport:1
-								},
-								remark_num:2,
-								share_num:2
-							},
-							{
-								follow:false,
-								username:'hahaha',
-								time:"2020-6-23 晚上 8.39",
-								user_pic:"/static/images/3.jpg",
-								title:"标题",
-								title_pic:"/static/images/10.jpg",
-								support:{
-									type:"unSupport",
-									support:2,
-									unSupport:10
-								},
-								remark_num:2,
-								share_num:1
-							},
-							{
-								follow:true,
-								username:'我是你蝶',
-								time:"2020-6-24 下午 7.39",
-								user_pic:"/static/images/4.jpg",
-								title:"年轻的生命中骤然出现意思阴霾",
-								title_pic:"/static/images/11.jpg",
-								support:{
-									type:"",
-									support:15,
-									unSupport:1
-								},
-								remark_num:5,
-								share_num:7
-							},
-						]
-					
-				
-				this.list1 = list
+				}).catch(err=>{
+					console.log(err)
+					this[' page'  + index]--
+				})
+								
 			},
 			admire(e)
 			{
@@ -148,16 +121,12 @@
 				})
 			}, 
 			toLoad() {
-				// this['loadMore' +  (this.activeIndex + 1)]
-				// this['list' + (this.activeIndex + 1)]
-				if(this.loadText != "上拉加载更多" ) return 
+				let index = this.activeIndex +1
+				
+				if(this.loadText == "没有更多了" ) return 
 				this['loadMore' +  (this.activeIndex + 1)] = '加载中...'
-				setTimeout(()=>{
-					this['list' + (this.activeIndex + 1)]  = [...this['list' + (this.activeIndex + 1)],...this['list' + (this.activeIndex + 1)]]
-					this['loadMore' +  (this.activeIndex + 1)] = '上拉加载更多'
-					// 拿到数据
-					// 更新loadText的状态
-				},2000)
+				this['page' + index ] ++
+				this.getData()
 			}
 			
 		},
@@ -174,6 +143,10 @@
 				list2:[],
 				loadMore1:"上拉加载更多",
 				loadMore2:"上拉加载更多",
+				page1:1,
+				page2:1,
+				firstLoad1:false,
+				firstLoad2:false
 			}
 		}
 		

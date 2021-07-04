@@ -48,6 +48,25 @@ export default {
 		    });  
 		});  
 		// #endif
+	},
+	helper(v) {
+		return {
+			id:v.id,
+			user_id:v.user_id,
+			follow:false,
+			username:v.user.username,
+			time:v.create_time,
+			user_pic:v.user.userpic,
+			title:v.title,
+			title_pic:v.titlepic,
+			support:{
+				type:'support',
+				support:2,
+				unSupport:1
+			},
+			remark_num:v.comment_count,
+			share_num:v.sharenum
+		}
 	}
 	
 	

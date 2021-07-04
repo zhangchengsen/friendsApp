@@ -1,5 +1,5 @@
 <template>
-	<view class="position-relative">
+	<view class="position-relative animated fadeIn">
 		<view class="iconfont icon-guanbi position-absolute right-0 font-lg" style="left: 20rpx;" :style="'top:' + statusHigh+'px;' "  @click="goBack">
 			
 		</view>

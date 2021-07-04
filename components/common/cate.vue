@@ -11,8 +11,8 @@
 		</view>
 		<view class="flex justify-center">
 			<block v-for = "(item,index) in topics" :key = "index">
-				<view class=" flex justify-center align-center border rounded " style="padding-left: 20rpx;padding-right: 20rpx;padding-top: 10rpx;margin: 15rpx;margin-bottom: 35rpx;padding-bottom: 10rpx;background-color:#F1F1F1;color: #5a5955;font-size: 26rpx;">
-					{{item}}
+				<view @click="more" class=" flex justify-center align-center border rounded " style="padding-left: 20rpx;padding-right: 20rpx;padding-top: 10rpx;margin: 15rpx;margin-bottom: 35rpx;padding-bottom: 10rpx;background-color:#F1F1F1;color: #5a5955;font-size: 26rpx;">
+					{{item.classname}}
 				</view>
 			</block>
 		</view>

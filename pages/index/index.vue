@@ -1,9 +1,9 @@
 <template>
-	<view style="margin-bottom: 30rpx;">
+	<view style="margin-bottom: 30rpx;" class="animated fadeIn">
 		
 			<scroll-view scroll-x class="scroll-row" scroll-with-animation="true" :scroll-into-view="scrollInto" style="height: 100rpx;">
 				<view v-for="(item,index) in tabList" :key = "index"  class="scroll-row-item px-2 py-2 font-md" :id = '"tab" + index' style="line-height: 60rpx;" @click="changeTab(index)"  :class = "activeIndex == index ? 'font-weight-bold font-lg active' : '' " :style =" activeIndex == index ? 'color:pink;': '' ">
-					{{item.name}}
+					{{item.classname}}
 				</view>
 			</scroll-view>
 			<swiper :current = "activeIndex" @change = "swiperChange" :style=" 'height:' +swiperH +'px'  ">
@@ -39,36 +39,7 @@
 				swiperH:600,
 				newsList:[],
 				cur_swiper:0,
-				tabList:[
-					{
-						name:'关注',
-					},
-					{
-						name:'推荐',
-					},
-					{
-						name:'体育',
-					},
-					{
-						name:'热点',
-					},
-					{
-						name:'财经',
-					},
-					{
-						name:'娱乐',
-					},
-					{
-						name:'军事',
-					},
-					{
-						name:'历史',
-					},
-					{
-						name:'本地',
-					}
-					
-				]
+				tabList:[]
 			}
 		},
 		
@@ -84,84 +55,60 @@
 		onNavigationBarSearchInputClicked() {
 			
 			uni.navigateTo({
-				url:"../search/search?type=tieZi"
+				url:"../search/search?type=post"
 			})
 		},
 		onNavigationBarButtonTap(e) {
-			uni.navigateTo({
-				url:'../public/public'
-			})
+			this.navigation('public')
+			// uni.navigateTo({
+			// 	url:'../public/public'
+			// })
 		}
 		,	
 		methods: {
 			
-			getData() {
+			async getData() {
+				let res = await this.$http.get('/postclass')
+				this.tabList = res.list
+				
+				// 获得信息
 				let arr = []
 				for (var i = 0 ; i < this.tabList.length ; i ++)
 				{
-					
 					let obj = {
 						loadMore:'上拉加载更多',
-						list:[
-							{
-								follow:false,
-								username:'云梦他乡',
-								time:"2020-6-23 晚上 8.29",
-								user_pic:"/static/images/2.jpg",
-								title:"很随意的标题",
-								title_pic:"/static/images/5.jpg",
-								support:{
-									type:"support",
-									support:2,
-									unSupport:1
-								},
-								remark_num:2,
-								share_num:2
-							},
-							{
-								follow:false,
-								username:'hahaha',
-								time:"2020-6-23 晚上 8.39",
-								user_pic:"/static/images/3.jpg",
-								title:"标题",
-								title_pic:"/static/images/10.jpg",
-								support:{
-									type:"unSupport",
-									support:2,
-									unSupport:10
-								},
-								remark_num:2,
-								share_num:1
-							},
-							{
-								follow:true,
-								username:'我是你蝶',
-								time:"2020-6-24 下午 7.39",
-								user_pic:"/static/images/4.jpg",
-								title:"年轻的生命中骤然出现意思阴霾",
-								title_pic:"/static/images/11.jpg",
-								support:{
-									type:"",
-									support:15,
-									unSupport:1
-								},
-								remark_num:5,
-								share_num:7
-							},
-						]
-					}
-					if (i == 3) obj = {
-						list:[]
-					}
+						list:[],
+						page:1,
+						firstLoad:false,
+						}
 					arr.push(obj)
 				}
 				this.newsList = arr
+				this.getList()
 			},
+			// 请求文章
+			async getList() {
+				let index = this.activeIndex
+				let id = this.tabList[index].id
+				let page = this.newsList[index].page
+				let isRefresh = page == 1 
+				let msg = await  this.$http.get('/postclass/'+ id +'/post/'+ page )
+				let list = msg.list.map(v=>{
+					return this.$U.helper(v)
+				})
+				this.newsList[index].list = isRefresh? list : [...this.newsList[index].list,...list],
+				this.newsList[index].firstLoad = true
+				this.newsList[index].loadMore = list.length < 10 ? '没有更多了' : '上拉加载更多'
+				 
+			}
+			,
 			changeTab(index) {
 				if(index == this.activeIndex) return 
 				this.activeIndex = index
 				
 				this.scrollInto = "tab" + index
+				if(!this.newsList[this.activeIndex].firstLoad)
+				this.getList()
 			}
 			,
 			swiperChange(e) {
@@ -200,12 +147,11 @@
 			},
 			toLoadMore(index) {
 				let item = this.newsList[index]
+				item.page++;
 				if(item.loadMore == "没有更多了") return
-				item.loadMore = '加载中...'
-				setTimeout(()=>{
-					item.list = [...item.list,...item.list]
-					item.loadMore = "下拉加载更多"
-				},1500)
+				item.loadMore = '加载中'
+				this.getList()
+
 			}
 		}
 	}

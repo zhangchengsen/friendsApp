@@ -75,12 +75,12 @@
 				imageUrl:this.image ? this.image : 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/b6304f00-5168-11eb-bd01-97bc1429a9ff.png'
 			}
 		},
-		onUnload:function(){
+		beforeDestroy:function(){
 			this.shareText='uni-app可以同时发布成原生App、小程序、H5，邀请你一起体验！',
 			this.href = 'https://uniapp.dcloud.io',
 			this.image='';
 		},
-		onLoad: function () {
+		mounted: function () {
 			uni.getProvider({
 				service: 'share',
 				success: (e) => {

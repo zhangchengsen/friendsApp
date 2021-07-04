@@ -240,7 +240,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-uni-view",
-    { staticStyle: { "margin-bottom": "30rpx" }, attrs: { _i: 0 } },
+    {
+      staticClass: _vm._$g(0, "sc"),
+      staticStyle: { "margin-bottom": "30rpx" },
+      attrs: { _i: 0 }
+    },
     [
       _c(
         "v-uni-scroll-view",
@@ -585,13 +589,15 @@ var render = function() {
                   _vm._t(
                     "default",
                     [
-                      _c("v-uni-image", {
-                        staticClass: _vm._$g("14-" + $30, "sc"),
-                        attrs: {
-                          src: _vm._$g("14-" + $30, "a-src"),
-                          _i: "14-" + $30
-                        }
-                      })
+                      _vm._$g("14-" + $30, "i")
+                        ? _c("v-uni-image", {
+                            staticClass: _vm._$g("14-" + $30, "sc"),
+                            attrs: {
+                              src: _vm._$g("14-" + $30, "a-src"),
+                              _i: "14-" + $30
+                            }
+                          })
+                        : _vm._e()
                     ],
                     { _i: "13-" + $30 }
                   )
@@ -5027,7 +5033,12 @@ var render = function() {
                     color: "#5a5955",
                     "font-size": "26rpx"
                   },
-                  attrs: { _i: "8-" + $30 }
+                  attrs: { _i: "8-" + $30 },
+                  on: {
+                    click: function($event) {
+                      return _vm.$handleViewEvent($event)
+                    }
+                  }
                 },
                 [_vm._v(_vm._$g("8-" + $30, "t0-0"))]
               )
@@ -5178,7 +5189,7 @@ var render = function() {
           _c("v-uni-image", {
             staticClass: _vm._$g(2, "sc"),
             staticStyle: { width: "150rpx", height: "140rpx" },
-            attrs: { src: "/static/images/42.jpg", _i: 2 }
+            attrs: { src: _vm._$g(2, "a-src"), _i: 2 }
           })
         ],
         1
@@ -5448,7 +5459,8 @@ var render = function() {
               ]
             })
           ]
-        : _vm._e()
+        : _vm._e(),
+      _vm._$g(13, "i") ? _c("loadMore", { attrs: { _i: 13 } }) : _vm._e()
     ],
     2
   )
@@ -6113,19 +6125,24 @@ var render = function() {
                       attrs: { "scroll-y": "true", _i: "9-" + $31 }
                     },
                     [
-                      _vm._l(_vm._$g(10 + "-" + $31, "f"), function(
-                        item1,
-                        index1,
-                        $22,
-                        $32
-                      ) {
-                        return [
-                          _c("topics", {
-                            key: item1["k0"],
-                            attrs: { _i: "11-" + $31 + "-" + $32 }
-                          })
-                        ]
-                      })
+                      _vm._$g("10-" + $31, "i")
+                        ? [
+                            _vm._l(_vm._$g(11 + "-" + $31, "f"), function(
+                              item1,
+                              index1,
+                              $22,
+                              $32
+                            ) {
+                              return [
+                                _c("topics", {
+                                  key: item1["k0"],
+                                  attrs: { _i: "12-" + $31 + "-" + $32 }
+                                })
+                              ]
+                            }),
+                            _c("loadMore", { attrs: { _i: "13-" + $31 } })
+                          ]
+                        : [_c("nothing", { attrs: { _i: "15-" + $31 } })]
                     ],
                     2
                   )
@@ -6527,7 +6544,7 @@ var render = function() {
                   height: "140rpx",
                   width: "150rpx"
                 },
-                attrs: { src: "/static/images/42.jpg", _i: 5 }
+                attrs: { src: _vm._$g(5, "a-src"), _i: 5 }
               })
             ],
             1
@@ -7318,7 +7335,8 @@ var render = function() {
                 staticStyle: {
                   width: "100rpx",
                   height: "100rpx",
-                  "border-radius": "50%"
+                  "border-radius": "50%",
+                  "background-color": "#d8d8d8"
                 },
                 attrs: { src: _vm._$g(4, "a-src"), _i: 4 }
               })
@@ -7329,19 +7347,33 @@ var render = function() {
             "v-uni-view",
             { staticClass: _vm._$g(5, "sc"), attrs: { _i: 5 } },
             [
+              _vm._$g(6, "i")
+                ? _c(
+                    "v-uni-view",
+                    { staticClass: _vm._$g(6, "sc"), attrs: { _i: 6 } },
+                    [_vm._v(_vm._$g(6, "t0-0"))]
+                  )
+                : _vm._e(),
               _c(
                 "v-uni-view",
                 {
-                  staticClass: _vm._$g(6, "sc"),
-                  class: _vm._$g(6, "c"),
+                  staticClass: _vm._$g(7, "sc"),
+                  class: _vm._$g(7, "c"),
                   staticStyle: {
                     "border-radius": "15rpx",
                     "min-width": "60rpx"
                   },
-                  attrs: { _i: 6 }
+                  attrs: { _i: 7 }
                 },
-                [_vm._v(_vm._$g(6, "t0-0"))]
-              )
+                [_vm._v(_vm._$g(7, "t0-0"))]
+              ),
+              _vm._$g(8, "i")
+                ? _c(
+                    "v-uni-view",
+                    { staticClass: _vm._$g(8, "sc"), attrs: { _i: 8 } },
+                    [_vm._v(_vm._$g(8, "t0-0"))]
+                  )
+                : _vm._e()
             ],
             1
           )

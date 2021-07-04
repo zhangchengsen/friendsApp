@@ -1,7 +1,7 @@
 <template>
 	<view class="flex my-2" @click="navTo">
 		<view class="flex justify-center align-center">
-			<image src="/static/images/42.jpg" style="width: 150rpx; height: 140rpx;" class="rounded"></image>
+			<image :src="item.title_pic" style="width: 150rpx; height: 140rpx;" class="rounded"></image>
 		</view>
 		<view class="ml-2 flex flex-column">
 			<view  style="font-size: 30rpx;">

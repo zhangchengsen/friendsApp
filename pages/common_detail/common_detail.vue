@@ -7,7 +7,7 @@
 					{{content}}
 				</view>
 				<block v-for="(item,index) in imageList" :key = "index" >
-					<image :src="item"  @click = 'preview(index)' ></image>
+					<image :src="item.url"  @click = 'preview(index)' ></image>
 				</block>
 			</view>
 		</common-list>
@@ -32,6 +32,8 @@
 	export default{
 		onLoad(e) {
 			this.passageData = JSON.parse(e.data)
+			this.getDetail()
+			this.getComment()
 			this.setTtitle()
 			
 		},
@@ -48,28 +50,49 @@
 				info:{},
 				inputVal:"",
 				remarkList:[],
-				imageList:['/static/images/11.jpg','/static/images/12.jpg','/static/images/10.jpg'],
-				content:'内容啊啊啊啊扩多军奥扩多军爱偶多军奥搜ID骄傲搜我加大搜我煎熬时间的awdawd;aw djawkd文件袋的骄傲我jawID节哀就打我我金无怠嘉爱爱神的箭阿斯 加速面积卅'
+				imageList:[],
+				content:''
 			}
 		},
 		onNavigationBarButtonTap(e) {
 			if(e.index != 0) return 
-			this.$refs.share.open()
-			// {
-			// 	title:this.passageData.title,
-			// 	shareText:this.content,
-			// 	href:"http://www.dishaxy.com",
-			// 	image:'/static/images/easy.jpg'
-			// }
+			 
+			this.$refs.share.open({
+				title: this.passageData.title,
+				shareText: this.content,
+				href:"",
+				image: this.passageData.title_pic
+			})
 		}
 		,
 		methods:{
+			async getDetail() {
+				let res = await this.$http.get('/post/' + this.passageData.id )
+				this.imageList = res.detail.images
+				this.content = res.detail.content
+			},
+			async getComment() {
+				let res = await this.$http.get('/post/' + this.passageData.id +'/comment' )
+				this.remarkList = res.list.map((v) =>{
+					return {
+						create_time:v.create_time,
+						data:v.data,
+						type:'remark',
+						uid:v.user_id,	//用户id
+						avatar:v.user.userpic,
+						username:v.user.username
+					}
+				})
+			}
+			,
+			
 			// 预览图片
 			preview(index)
 			{
+				let list = this.imageList.map(v=>v.url)
 				 uni.previewImage({
 							current:index,
-				            urls: this.imageList,
+				            urls: list,
 				           
 				        });
 				fail:(res)=>{
@@ -89,17 +112,7 @@
 				}
 				this.remarkList.push(obj)
 				this.inputVal = ''
-				// uni.getSystemInfo({
-				// 	success: (res) => {
-				// 		console.log(res)
-				// 	}
-				// })
-				// uni.pageScrollTo({
-				// 	scrollTop:800,
-				// 	fail: (res) => {
-				// 		console.log(res)
-				// 	}
-				// })
+				
 			},
 			// 设置标题头
 			setTtitle() {

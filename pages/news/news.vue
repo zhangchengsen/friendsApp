@@ -37,7 +37,7 @@
 							<swiper style="text-align: center;height: 300rpx;margin-bottom: 20rpx;" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
 							<block v-for="(item,index) in banner" :key = "index">
 								<swiper-item style="height: 300rpx;">
-									<image :src='item' class="rounded" style="height: 300rpx;width: 715rpx;"></image>
+									<image :src='item.src' class="rounded" style="height: 300rpx;width: 715rpx;"></image>
 								</swiper-item>
 							</block>
 							</swiper>
@@ -78,7 +78,7 @@
 				scrollH:600,
 				newsList:[],
 				topics:['关注','推荐','体育','热点','财经','娱乐'],
-				banner:['/static/images/banner3.jpg',"/static/images/banner2.jpg","/static/images/2.jpg"],
+				banner:[],
 				topicList:[]
 			}
 		},
@@ -109,26 +109,27 @@
 			},
 			//获取topicsList的数据
 			getTopicList() {
-				let arr = []
-				for(var i = 0 ; i < 10 ; i++)
-				{
-					let obj = {
-						topicName:"#话题名称哈哈哈哈",
-						topicDesc:"话题描述",
-						news:42,
-						news_today:0
-					}
-					if(i == 3 || i ==4)
-					{
-						obj.topicDesc = "??????????"
-						obj.news = 23
-						obj.news_today = 4
-					}
-					arr.push(obj);
-				}
-				 this.topicList = arr;
+				this.$http.get('/topicclass').then(res=>{
+					this.topics = res.list
+				}).catch(err=>{console.log(err.message)})
+				this.$http.get('/hottopic').then(res=>{
+					let list = res.list.map(v=>{
+						return {
+							topicName:v.title,
+							topicDesc:v.desc,
+							news:v.post_count,
+							news_today:v.todaypost_count,
+							title_pic:v.titlepic,
+							id:v.id
+						}
+					})
+					this.topicList = list;
+				}).catch(err=>{console.log(err.message)})
+				this.$http.get('/adsense/0').then(res=>{
+					this.banner = res.list
+				}).catch(err=>{console.log(err.message)})
 			},
-			// 获取假数据
+
 			getData() {
 				let arr = []
 				for(var i = 0 ; i < 2 ; i ++)

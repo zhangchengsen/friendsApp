@@ -9,7 +9,7 @@
 		<!-- 关联导航 -->
 		<scroll-view scroll-x class="scroll-row" scroll-with-animation="true" :scroll-into-view="scrollInto" style="height: 100rpx;">
 			<view v-for="(item,index) in tabList" :key = "index"  class="scroll-row-item px-2 py-2 font-md" :id = '"tab" + index' style="line-height: 60rpx;" @click="changeTab(index)"  :class = "curIndex == index ? 'font-weight-bold font-lg active' : '' " :style =" curIndex == index ? 'color:pink;': '' ">
-				{{item.name}}
+				{{item.classname}}
 			</view>
 		</scroll-view>
 		<!-- 移动轮播 -->
@@ -17,9 +17,16 @@
 			<block v-for = "(item,index) in tabList" :key = "index">
 				<swiper-item>
 						<scroll-view scroll-y="true"  :style=" 'height:' + swiperH +'px' " >
-							<block v-for="(item1,index1) in topicList[index]" :key = "index1">
-								<topics :item= "item1"></topics>
-							</block>
+							<template v-if="topicList[curIndex].list.length > 0">
+								<block v-for="(item1,index1) in topicList[index].list" :key = "index1">
+									<topics :item= "item1"></topics>
+								</block>
+								<loadMore :load = "topicList[curIndex].loadMore" ></loadMore>
+							</template>
+							<template v-else>
+								<nothing></nothing>
+							</template>
+							
 						</scroll-view>
 					
 				</swiper-item>
@@ -37,31 +44,68 @@
 			topics
 		},
 		methods:{
-			getTopicList() {
-				let arr = []
-				for(var i = 0 ; i < 10 ; i++)
-				{
-					let obj = {
-						topicName:"#话题名称哈哈哈哈",
-						topicDesc:"话题描述",
-						news:42,
-						news_today:0,
-						scrollInto:'tab1'
-					}
-					if(i == 3 || i ==4)
+			 getClass()
+			{
+				this.$http.get('/topicclass').then(res=>{
+					this.tabList = res.list
+					
+					let arr = []
+					for(var i = 0 ; i < this.tabList.length ; i++)
 					{
-						obj.topicDesc = "??????????"
-						obj.news = 23
-						obj.news_today = 4
+						let obj = {
+							loadMore:'上拉加载更多',
+							list:[],
+							page:1,
+							firstLoad:false
+						}
+						arr.push(obj)
 					}
-					arr.push(obj);
-				}
-				for(var i = 0 ; i < 12 ; i++)
-				{
-					this.topicList.push(arr);
-				}
-				 
+					this.topicList = arr
+					this.getData()
+				}).catch(err=>console.log(err.message))
+				
 			},
+			 getData() {
+				let index = this.curIndex
+				let id = this.tabList[index].id
+				let page = this.topicList[index].page
+				let isRefresh = page == 1 
+				// 请求数据
+				if(this.topicList[index].firstLoad) return 
+				 this.$http.get('/topicclass/'+ id +'/topic/'+ page ).then(res=>{
+					let list = res.list.map(v=>{
+						return {
+							topicName:v.title,
+							topicDesc:v.desc,
+							news:v.post_count,
+							news_today:v.todaypost_count,
+							title_pic:v.titlepic,
+							id:v.id
+						}
+					})
+					if(isRefresh)
+						this.topicList[index].list = list
+					else 
+						this.topicList[index].list = [...this.topicList[index].list,...list]
+						console.log(this.topicList[index].list)
+					if(list.length < 10) this.topicList[index].loadMore = '没有更多了'
+					else this.topicList[index].loadMore = '上拉加载更多'
+					this.topicList[index].firstLoad = true
+				}).catch(err=>{
+					page--
+				})
+				
+			},
+			toLoadMore(index) {
+				let item = this.topicList[this.curIndex]
+				item.page++
+				if(item.loadMore == "没有更多了") return
+				item.loadMore = '加载中...'
+				this.getData()
+				
+			
+			}
+			,
 			goBack() {
 				uni.navigateBack({
 					delta:1
@@ -76,16 +120,18 @@
 				this.curIndex = index
 				
 				this.scrollInto = "tab" + index
+				if(!this.topicList[index].loadMore)
+				this.getData()
 			}
 		},
 		onLoad() {
+			this.getClass()
 			let res = uni.getSystemInfo({
 				success: (res) => {
 					this.swiperH = res.windowHeight - uni.upx2px(100) - res.statusBarHeight 
 					
 				}
 			})
-			this.getTopicList()
 		},
 		data() {
 			return {
@@ -93,37 +139,14 @@
 				swiperH:600,
 				topicList:[],
 				scrollInto:"",
+				loadMore:'上拉加载更多',
 				tabList:[
-					{
-						name:'关注',
-					},
-					{
-						name:'推荐',
-					},
-					{
-						name:'体育',
-					},
-					{
-						name:'热点',
-					},
-					{
-						name:'财经',
-					},
-					{
-						name:'娱乐',
-					},
-					{
-						name:'军事',
-					},
-					{
-						name:'历史',
-					},
-					{
-						name:'本地',
-					}
 					
 				]
 			}
+		},
+		onReachBottom() {
+			this.toLoadMore()
 		}
 	}
 </script>

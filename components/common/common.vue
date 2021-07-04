@@ -10,7 +10,7 @@
 							{{item.username}}
 						</view>
 						<view class="time">
-							{{item.time}}
+							{{item.time | formatTime}}
 						</view>
 					</view>
 				</view>
@@ -27,7 +27,7 @@
 			</view>
 			<view class="content mt-1 mb-1" @click="passage">
 				<slot>
-					<image :src="item.title_pic" class="border" ></image>
+					<image :src="item.title_pic" class="border" v-if ="item.title_pic" ></image>
 				</slot>
 			</view>
 			<!-- 文字图标 -->
@@ -60,7 +60,14 @@
 </template>
 
 <script>
+	import $T from './time.js'
 	export default {
+		
+		filters:{
+			formatTime (value){
+				return $T.gettime(value)
+			}
+		},
 		props:
 		{
 			userList:Array,
@@ -89,14 +96,20 @@
 			},
 			//关注
 			follow(index) {
-				this.$emit('follow',{index})
+				this.checkAuth(()=>{
+					this.$emit('follow',{index})
+					
+				})
 			},
 			//点赞
 			operation(type,index) {
-				this.$emit('admire',{
-					type,
-					index
+				this.checkAuth(()=>{
+					this.$emit('admire',{
+						type,
+						index
+					})
 				})
+				
 			},
 			//踩
 			unAdmire(index) {

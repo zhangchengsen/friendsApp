@@ -19,7 +19,7 @@
 						<scroll-view scroll-y="true"  :style=" 'height:' + swiperH +'px' " >
 							<template v-if="topicList[curIndex].list.length > 0">
 								<block v-for="(item1,index1) in topicList[index].list" :key = "index1">
-									<topics :item= "item1"></topics>
+									<topics class="pl-2" :item= "item1"></topics>
 								</block>
 								<loadMore :load = "topicList[curIndex].loadMore" ></loadMore>
 							</template>

@@ -11,7 +11,7 @@
 				<input type="text" class="p-2" placeholder="昵称/邮箱/手机" v-model="username" />
 			</view>
 			<view class="border-bottom m-2 flex align-center">
-				<input type="text" class="p-2 flex-1" v-model="password" placeholder="请输入密码" />
+				<input type="password" class="p-2 flex-1" v-model="password" placeholder="请输入密码" />
 				<text class="pr-1" style="color: #6d6c67;">忘记密码?</text>
 			</view>
 			<view @click="toLogin" :style="disabled ? 'color:#dcdcdc;' : 'color:#ffffff;' " class=" font-lg mx-3 flex align-center justify-center rounded-circle" style="height: 110rpx;background-color: #fd597c; margin-top: 80rpx;"  >
@@ -19,7 +19,7 @@
 			</view>
 			<view class="flex align-center justify-center m-4">
 				<view class="" @click="changeStatus" style="color: #3d7275;">
-					验证码登录
+					<text>(推荐)</text>验证码登录
 				</view>
 				<text class="m-1">丨</text>
 				<view class="" style="color: #3d7275;">
@@ -66,14 +66,7 @@
 				
 			</view>
 		</view>
-		<!-- <view class="flex justify-center align-center p-2">
-			<view class="iconfont icon-QQ m-2 flex align-center justify-center  bg-primary  rounded-circle font-lg text-white" style="width: 100rpx;height: 100rpx;">
-			</view>
-			<view class="iconfont icon-weixin m-2 flex align-center justify-center  bg-success  rounded-circle font-lg text-white" style="width: 100rpx;height: 100rpx;">
-			</view>
-			<view class="iconfont icon-xinlangweibo m-2 flex align-center justify-center  bg-danger  rounded-circle font-lg text-white" style="width: 100rpx;height: 100rpx;">
-			</view>
-		</view> -->
+		
 		<login></login>
 		<view class="text-center">
 			<text style="color: #cacaca;">注册代表您同意</text><text style="color: #007AFF;">《XXX社区协议》</text>
@@ -100,17 +93,44 @@
 					delta:1
 				})
 			},
+			// 切换
 			changeStatus() {
 				this.status = !this.status
 				this.valueNum = ''
 				this.password = ''
 			},
+			// 登录
 			toLogin() {
 				if(this.disabled) return 
-				else return uni.showToast({
-					title:'登录成功'
-				})
+				if(!this.status)
+				{
+					console.log(this.username + this.password)
+					this.$http.post('/user/login',{
+						username:this.username,
+						password:this.password
+					}).then(res=>{
+						console.log(res)
+					}).catch(err=>{console.log(err.message)})
+				}
+				else
+				{
+					this.$http.post('/user/phonelogin',{
+						code:this.valueNum,
+						phone:this.number
+					}).then(res=>{
+						
+						this.$store.commit('changeLoginStatus',res)
+						setTimeout(()=>{
+							uni.navigateBack({
+								delta:1
+							})
+						},1700)
+						
+						
+					}).catch(err=>{console.log(err)})
+				}
 			},
+			// 发送验证码
 			getNum () {
 				if(!(/^1[3456789]\d{9}$/.test(this.number))){ 
 					return uni.showToast({
@@ -119,7 +139,8 @@
 					});  
 				} 
 				if(!this.canGetNum) return
-				this.time = 5
+				
+				this.time = 60
 				let timer = setInterval(()=>{
 					if(this.time) this.time--;
 					else 
@@ -128,6 +149,17 @@
 						clearInterval(timer)
 					}
 				},1000)
+				this.$http.post('/user/sendcode',{
+					phone:this.number
+				},{
+					native:true,
+				}).then(res=>{
+					uni.showToast({
+						title:res.data.msg,
+						duration:3000,
+						icon:'none'
+					})
+				})
 				
 			}
 		},

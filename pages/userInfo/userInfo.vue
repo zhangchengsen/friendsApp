@@ -2,7 +2,7 @@
 	<view class="">
 		<uni-list-item title="头像" clickable @click="changeAvatar">
 			<view class="flex align-center justify-center" slot="footer">
-				<image :src="user_pic" class="rounded-circle" style="width: 100rpx;height: 100rpx;"></image>
+				<image :src="user.userpic" class="rounded-circle" style="width: 100rpx;height: 100rpx;"></image>
 			</view>
 			<text slot="rightIcon" class="iconfont icon-bianji1 pr-2"></text>
 		</uni-list-item> 
@@ -61,8 +61,22 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	import cityPicker from '../../components/mpvue-citypicker/mpvueCityPicker.vue'
 	export default{
+		onShow(){
+			let userinfo = this.user.userinfo
+			console.log(userinfo)
+			if(userinfo)
+			{
+				this.username = this.user.username
+				this.pickerText = userinfo.path
+				this.sex = userinfo.sex
+				this.emotion = userinfo.qg
+				this.work = userinfo.job
+				this.birthday = userinfo.birthday
+			}
+		},
 		components:{
 			cityPicker
 		},
@@ -72,21 +86,40 @@
 				
 			},
 			onConfirm(e){
-				let st = ''
-				for(var i = 0 ; i < e.label.length ; i++)
-				{
-					let s = e.label[i]
-					if(s == '-' ) s = " "
-					st += s			
-				}
-				this.pickerText = st
+				
+				this.pickerText = e.label
 				this.cityPickerValueDefault = e.value
 			},
 			onCancel(e){
 				console.log('取消选择')
 			},
 			submit() {
-				console.log('完成')
+				let obj = {
+					name:this.username,
+					sex:this.sex,
+					qg:this.emotion,
+					job:this.job,
+					birthday:this.birthday,
+					path:this.pickerText
+				}
+				console.log(obj)
+				this.$http.post('/edituserinfo',obj,{
+					token:true
+				}).then(res=>{
+					console.log(res);
+					this.$store.commit('editUserInfo',{
+						key:"username",
+						value:this.username
+					})
+					this.$store.commit('editUserUserInfo',obj)
+					uni.navigateBack({
+						delta: 1
+					});
+					uni.showToast({
+						title: '修改资料成功',
+						icon: 'none'
+					});
+				})
 			},
 			changeAvatar() {
 				uni.chooseImage({
@@ -94,7 +127,19 @@
 					sizeType:['compressed'],
 					sourceType:['album','camera'],
 					success:(res)=>{
-						this.user_pic = res.tempFilePaths[0]
+						this.$http.upload('/edituserpic',{
+							filePath:res.tempFilePaths[0],
+							name:'userpic',
+							token:true
+						}).then(result=>{
+							this.$store.commit('editUserInfo',{
+								key:"userpic",
+								value:result.data
+							})
+							uni.showToast({
+								title:'修改成功'
+							})
+						}).catch(err=>{console.log(err.message)})
 					}
 				})
 			},
@@ -116,14 +161,14 @@
 					}
 				})
 			},
-			changeWork() {
-				const arr = ['IT','农民','教师','医生','经商']
+			changeWork(){
+				let JobArray = ['IT','教师','农名']
 				uni.showActionSheet({
-					itemList:arr,
-					success:res=>{
-						this.work = res.tapIndex
-					}
-				})
+				    itemList: JobArray,
+				    success:(res)=>{
+				        this.job = JobArray[res.tapIndex]
+				    }
+				});
 			},
 			birthChange(e)
 			{
@@ -132,7 +177,6 @@
 		},
 		data() {
 			return {
-				user_pic:"../../static/images/2.jpg",
 				username:'云梦她乡',
 				sex:0,
 				emotion:0,
@@ -145,6 +189,9 @@
 			}
 		},
 		computed:{
+			...mapState({
+				user:state=>state.user
+			}),
 			getSex() {
 				if(!this.sex) return '男'
 				else if(this.sex == 1) return '女'

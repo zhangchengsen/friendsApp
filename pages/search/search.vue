@@ -28,10 +28,11 @@
 		</template>
 		<template v-if="type == 'topic' ">
 			<block v-for="(item,index) in  searchList">
-				<topics :item="item"></topics>
+				<topics class="pl-2" :item="item"></topics>
 			</block>
 		</template>
 		<loadMore :load ="loadMore" v-if='searchList.length > 0'></loadMore>
+		<nothing v-if="nothing"></nothing>
 	</view>
 </template>
 
@@ -79,7 +80,8 @@
 				page:1,
 				loadMore:'上拉加载更多',
 				preSearch:'',
-				historyList:[]
+				historyList:[],
+				nothing:false
 			}
 		},
 		onReachBottom()			
@@ -103,59 +105,75 @@
 			this.search()
 				
 				
-			// {
-			// 	avatar:"/static/images/4.jpg",
-			// 	sex:1,
-			// 	username:'ymtx',
-			// 	age:18,
-			// 	isFollow:true
-			// },
 			
 			
 			
-		    // topicName:"#话题名称哈哈哈哈",
-		    // topicDesc:"话题描述",
-		    // news:42,
-		    // news_today:0
+			
+		   
 		}
 		,
 		methods:{
 			
-			async search () {
+			 search () {
 				let isRefresh = this.inputVal == this.preSearch ? true : false
 				if(!isRefresh) this.page = 1
-				let res =  await this.$http.post('/search/post',{
+				let type = this.type
+				this.$http.post(`/search/${type}`,{
 					keyword:this.inputVal,
 					page:this.page
+				}).then(res=>{
+					if(res.list.length < 1) this.nothing = true
+					else this.nothing = false
+					let list = []
+					if(this.type == 'post')
+					 list = res.list.map(v=>{
+						return this.$U.helper(v)
+					})
+					else if(this.type == 'topic')
+					{
+						list = res.list.map(v=>{
+							return {
+								 topicName:v.title,
+								 topicDesc:v.desc,
+								 news:v.post_count,
+								 news_today:v.todaypost_count,
+								 title_pic:v.titlepic,
+								 id:v.id
+							}
+						})
+					}
+					else
+					{
+						list = res.list.map(v=>{
+							return {
+									avatar:"/static/images/4.jpg",
+									sex:1,
+									username:'ymtx',
+									age:18,
+									isFollow:true
+									}
+						})
+					}
+					if(!isRefresh) 
+					{
+						this.historyList = this.historyList.filter(v=> {
+							return v !=this.inputVal
+						})
+						this.historyList.unshift(this.inputVal)
+						this.searchList = list
+						uni.setStorageSync('history',JSON.stringify(this.historyList))
+					}
+					else this.searchList = [...this.searchList,...list]
+					this.page ++
+					this.preSearch = this.inputVal
+					if(list.length < 10) this.loadMore = '没有更多了'
+					uni.hideLoading()
+				}).catch(err=>{
+					console.log(err.message)
+					this.page--;
+					uni.hideLoading()
 				})
 				
-
-				if(!res)
-				{
-					this.page--;
-					uni.showToast({
-						icon:'none',
-						title:'请求失败'
-					})
-					uni.hideLoading()
-				}
-				let list = res.list.map(v=>{
-					return this.$U.helper(v)
-				})
-				if(!isRefresh) 
-				{
-					this.historyList = this.historyList.filter(v=> {
-						return v !=this.inputVal
-					})
-					this.historyList.unshift(this.inputVal)
-					this.searchList = list
-					uni.setStorageSync('history',JSON.stringify(this.historyList))
-				}
-				else this.searchList = [...this.searchList,...list]
-				this.page ++
-				this.preSearch = this.inputVal
-				if(list.length < 10) this.loadMore = '没有更多了'
-				uni.hideLoading()
 			},
 			clickHis(item) {
 				uni.hideKeyboard()	//隐藏软键盘

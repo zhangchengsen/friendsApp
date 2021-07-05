@@ -1,8 +1,7 @@
 <template>
-	<view class="">
+	<view class="p-2">
 		<input type="text"  v-model="email" placeholder="你要绑定的邮箱" class="uni-input" />
-		<input type="text"  v-model="ePassword" placeholder="邮箱的密码" class="uni-input" />
-		<view @click="submit"  class="m-2 font-lg flex align-center justify-center rounded-circle" style="height: 110rpx;background-color: #fd597c;" :style="disabled ? 'color: #fff;' :'color:#b5b5b5' " >
+		<view @click="submit"  class="m-3 font-lg flex align-center justify-center rounded-circle" style="height: 100rpx;background-color: #fd597c;" :style="disabled ? 'color: #fff;' :'color:#b5b5b5' " >
 			去绑定
 		</view>
 	</view>
@@ -13,13 +12,12 @@
 		data() {
 			return {
 				email:'',
-				ePassword:''
 				
 			}
 		},
 		computed:{
 			disabled() {
-				return this.email && this.ePassword
+				return this.email 
 			}
 		},
 		methods:{
@@ -30,11 +28,25 @@
 					title:'邮箱格式错误',
 					icon:'none'
 				})
-				
-			
-				uni.showToast({
-					title:'提交成功'
+				this.$http.post('/user/bindemail',{
+					email:this.email
+				},{token:true})
+				.then(res=>{
+					this.$store.commit('editUserInfo',{
+						key:'email',
+						value:true
+					})
+					uni.navigateBack({
+						delta: 1
+					});
+					uni.showToast({
+						title: '邮箱绑定成功',
+						icon: 'none'
+					});
+				}).catch(err=>{
+					console.log(err.message)
 				})
+				
 			}
 		}
 	}

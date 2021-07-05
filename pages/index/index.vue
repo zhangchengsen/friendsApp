@@ -93,6 +93,7 @@
 				let page = this.newsList[index].page
 				let isRefresh = page == 1 
 				let msg = await  this.$http.get('/postclass/'+ id +'/post/'+ page )
+				console.log(msg)
 				let list = msg.list.map(v=>{
 					return this.$U.helper(v)
 				})
@@ -138,9 +139,16 @@
 				}
 				
 			},
-			follow(e) {
-				let obj = this.newsList[this.activeIndex].list[e.index]		//指针
-				obj.follow = true
+			follow(user_id) {
+				console.log(user_id)
+				this.newsList.forEach(item=>{
+					item.list.forEach((v)=>{
+						if(v.user_id === user_id)
+						{
+							v.follow = true
+						}
+					})
+				})
 				uni.showToast({
 					title:"关注成功"
 				})

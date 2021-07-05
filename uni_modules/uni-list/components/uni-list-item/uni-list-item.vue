@@ -35,7 +35,7 @@
 					</view>
 				</slot>
 			</view>
-			<slot name="rightIcon">
+			<slot name="rightIcon" >
 			<uni-icons v-if="showArrow || link" :size="16" class="uni-icon-wrapper" color="#bbb" type="arrowright" />
 			</slot>
 		</view>

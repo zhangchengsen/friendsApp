@@ -1,5 +1,6 @@
 <template>
 	<view class="">
+		
 		<input type="text"  v-model="oldPwd" placeholder="输入旧密码" class="uni-input" />
 		<input type="text"  v-model="newPwd" placeholder="输入旧密码" class="uni-input" />
 		<input type="text"  v-model="renewPwd" placeholder="输入旧密码" class="uni-input" />

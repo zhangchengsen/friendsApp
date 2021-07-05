@@ -14,7 +14,7 @@
 						</view>
 					</view>
 				</view>
-				<view v-if = "!item.follow"  class="button animated animate__fast" hover-class="pulse" @click.stop = "follow(index)">
+				<view v-if = "!item.follow"  class="button animated animate__fast" hover-class="pulse" @click.stop = "follow(item,index)">
 					关注
 				</view>
 				<view v-else style="color:#FFFFFF">
@@ -95,11 +95,14 @@
 				})
 			},
 			//关注
-			follow(index) {
-				this.checkAuth(()=>{
-					this.$emit('follow',{index})
-					
-				})
+			follow(item,index) {
+				this.$http.post('/follow',{
+					follow_id:item.user_id
+				},{token:true})
+				.then(res=>{
+					console.log(res)
+					this.$emit('follow',item.user_id)
+				}).catch(err=>console.log(err.message))
 			},
 			//点赞
 			operation(type,index) {

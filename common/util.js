@@ -50,19 +50,24 @@ export default {
 		// #endif
 	},
 	helper(v) {
+		let isFollow = (v.user.fens.length > 0)
+		let support = ''
+		if(v.support.length > 0){
+			support = v.support[0].type === 0 ? 'support' : 'unSupport'
+		}
 		return {
 			id:v.id,
 			user_id:v.user_id,
-			follow:false,
+			follow:isFollow,
 			username:v.user.username,
 			time:v.create_time,
 			user_pic:v.user.userpic,
 			title:v.title,
 			title_pic:v.titlepic,
 			support:{
-				type:'support',
-				support:2,
-				unSupport:1
+				type:support,
+				support:v.ding_count,
+				unSupport:v.cai_count
 			},
 			remark_num:v.comment_count,
 			share_num:v.sharenum

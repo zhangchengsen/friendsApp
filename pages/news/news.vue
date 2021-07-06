@@ -15,7 +15,7 @@
 			<swiper :current = "currentTab" @change = "swiperChange" :style=" 'height:' +scrollH +'px'  ">
 					<swiper-item>
 					<scroll-view  @scrolltolower="toLoadMore(0)" scroll-y="true" :style=" 'height:' +scrollH +'px'" >
-							<common-list :userList="newsList[0].list" @admire="admire" @follow = "follow"></common-list>
+							<common-list :userList="newsList[0].list" @admire="admire" ></common-list>
 							<loadMore :load = "newsList[0].loadMore"></loadMore>
 					</scroll-view>
 						
@@ -83,7 +83,15 @@
 			}
 		},
 		onLoad() {
-			this.getData()
+			let obj = {
+				firstLoad:false,
+				page:1,
+				list:[],
+				loadMore:'下拉加载更多'
+			}
+			
+			this.newsList.push(obj);
+			this.getList()
 			this.getTopicList()
 		},
 		components:{
@@ -98,8 +106,23 @@
 					this.scrollH = res.windowHeight - res.statusBarHeight -44 
 				}
 			})
+			uni.$on('changeSupportOrFollow',(e)=>{
+				switch (e.type) {
+					case 'follow':
+						this.follow(e.data.user_id)
+						break
+					default:
+						this.admire(e.data)
+						break;
+				}
+			})
 			
 		},
+		onUnload()
+		{
+			uni.$off('changeSupportOrFollow')
+		}
+		,
 		methods:{
 			// 跳转到搜索
 			toSearch() {
@@ -130,64 +153,20 @@
 				}).catch(err=>{console.log(err.message)})
 			},
 
-			getData() {
-				let arr = []
-				for(var i = 0 ; i < 2 ; i ++)
-				{
-					let obj = {
-						loadMore:"加载更多",
-						list:[
-							{
-								follow:true,
-								username:'云梦他乡',
-								time:"2020-6-23 晚上 8.29",
-								user_pic:"/static/images/2.jpg",
-								title:"很随意的标题",
-								title_pic:"/static/images/5.jpg",
-								support:{
-									type:"support",
-									support:2,
-									unSupport:1
-								},
-								remark_num:2,
-								share_num:2
-							},
-							{
-								follow:true,
-								username:'hahaha',
-								time:"2020-6-23 晚上 8.39",
-								user_pic:"/static/images/3.jpg",
-								title:"标题",
-								title_pic:"/static/images/10.jpg",
-								support:{
-									type:"unSupport",
-									support:2,
-									unSupport:10
-								},
-								remark_num:2,
-								share_num:1
-							},
-								{
-									follow:true,
-								username:'我是你蝶',
-								time:"2020-6-24 下午 7.39",
-								user_pic:"/static/images/4.jpg",
-								title:"年轻的生命中骤然出现意思阴霾",
-								title_pic:"/static/images/11.jpg",
-								support:{
-									type:"",
-									support:15,
-									unSupport:1
-								},
-								remark_num:5,
-								share_num:7
-							},
-						]
-					}
+			async getList() {
 				
-					arr.push(obj)
-				}
-				this.newsList = arr;
+				let index = 0
+				let id = 2
+				let page = this.newsList[index].page
+				let isRefresh = page == 1 
+				let msg = await  this.$http.get('/postclass/'+ id +'/post/'+ page )
+				let list = msg.list.map(v=>{
+					return this.$U.helper(v)
+				})
+				this.newsList[index].list = isRefresh? list : [...this.newsList[index].list,...list],
+				this.newsList[index].firstLoad = true 
+				this.newsList[index].loadMore = list.length < 10 ? '没有更多了' : '上拉加载更多'
+				 
 			},
 			// 改变tab栏
 			clickTab(index) {
@@ -221,9 +200,15 @@
 				}
 				
 			},
-			follow(e) {
-				let obj = this.newsList[this.currentTab].list[e.index]		//指针
-				obj.follow = true
+			follow(user_id) {
+				this.newsList.forEach(item=>{
+					item.list.forEach((v)=>{
+						if(v.user_id === user_id)
+						{
+							v.follow = true
+						}
+					})
+				})
 				uni.showToast({
 					title:"关注成功"
 				})

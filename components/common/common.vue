@@ -33,12 +33,12 @@
 			<!-- 文字图标 -->
 			<view class="flex m-2">
 				<!-- 支持 -->
-				<view class="flex flex-1 justify-center p-1 animated" hover-class="rubberBand" @click.stop="operation('support',index)" :style=" item.support.type == 'support' ? 'color:pink;' : ''   ">
+				<view class="flex flex-1 justify-center p-1 animated" hover-class="rubberBand" @click.stop="operation(item,'support',index)" :style=" item.support.type == 'support' ? 'color:pink;' : ''   ">
 					<text class="iconfont icon-dianzan2 " style="margin-top:7rpx;" ></text>
 					<text class="ml-1">{{item.support.support}}</text>
 				</view>
 				<!-- 踩 -->
-				<view class="flex flex-1 justify-center p-1 animated " hover-class="swing" @click.stop="operation('unSupport',index)" :style=" item.support.type == 'unSupport' ? 'color:pink;' : ''   ">
+				<view class="flex flex-1 justify-center p-1 animated " hover-class="swing" @click.stop="operation(item,'unSupport',index)" :style=" item.support.type == 'unSupport' ? 'color:pink;' : ''   ">
 					<text class="iconfont icon-cai" style="margin-top:7rpx;"></text>
 					<text class="ml-1">{{item.support.unSupport}}</text>
 				</view>
@@ -78,6 +78,7 @@
 			}
 		},
 		mounted() {
+			
 		},
 		methods: {
 			// 到个人空间
@@ -96,23 +97,45 @@
 			},
 			//关注
 			follow(item,index) {
+				console.log(item.user_id)
 				this.$http.post('/follow',{
 					follow_id:item.user_id
 				},{token:true})
 				.then(res=>{
-					console.log(res)
-					this.$emit('follow',item.user_id)
+					uni.$emit('changeSupportOrFollow',{
+						type:"follow",
+						data:{
+							user_id:item.user_id
+						}
+					})
+					if(this.type == 'detail') uni.setStorageSync('uid',item.user_id)
 				}).catch(err=>console.log(err.message))
 			},
 			//点赞
-			operation(type,index) {
+			operation(item,type,index) {
 				this.checkAuth(()=>{
-					this.$emit('admire',{
-						type,
-						index
+					this.$http.post('/support',{
+						post_id:item.id,
+						type: type == 'support' ? 0 : 1
+					},{
+						token:true,
+						native:true
+					}).then(res=>{
+						console.log(res)
+					}).catch(err=>{console.log('错误 '+err.message)})
+					uni.$emit('changeSupportOrFollow',{
+						type:"support",
+						data:{
+							type:type,
+							index:index
+						}
 					})
+					// this.$emit('admire',{
+					// 	type,
+					// 	index
+					// })
 				})
-				
+ 				
 			},
 			//踩
 			unAdmire(index) {

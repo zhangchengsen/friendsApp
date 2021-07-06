@@ -7,7 +7,8 @@ export default new Vuex.Store({
 	state:{
 		loginStatus:false,
 		user:{},
-		token:false
+		token:false,
+		change:false
 	},
 	mutations:{
 		changeLoginStatus(state,user)
@@ -16,6 +17,7 @@ export default new Vuex.Store({
 			state.user = user
 			state.token = state.user.token
 			uni.setStorageSync('user', JSON.stringify(user));
+			state.change = true
 		},
 		initStatus(state)
 		{
@@ -23,18 +25,18 @@ export default new Vuex.Store({
 			if(!user) return 
 			state.loginStatus = true
 			state.user = JSON.parse(user)
+			state.change = true
 			state.token = state.user.token
 		},
 		logOut(state)
 		{
-			
+			state.change = true
 			state.loginStatus = false
 			state.user = {}
 			state.token = false
 			uni.removeStorageSync('user');
 		},
 		editUserInfo(state,{ key,value }){
-			console.log(key +" " + value)
 			state.user[key] = value
 			uni.setStorageSync('user', JSON.stringify(state.user));
 			console.log(state.user)
@@ -48,6 +50,9 @@ export default new Vuex.Store({
 				state.user.userinfo.birthday = obj.birthday
 				uni.setStorageSync('user', JSON.stringify(state.user));
 			}
-		}
+		},
+		change(state){
+			state.change = false
+		},
 	}
 })

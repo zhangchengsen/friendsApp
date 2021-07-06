@@ -26,7 +26,6 @@ export default {
 			uni.request({
 				...options,
 				success: (res) => {
-					
 					if(options.native) return resolve(res)
 					if(res.statusCode != 200)
 					{
@@ -41,7 +40,7 @@ export default {
 				fail: (err) => {
 					uni.showToast({
 						icon:'none',
-						title:res.message || '请求失败'
+						title:err.message || '请求失败'
 					})
 					return reject('获取失败')
 				}

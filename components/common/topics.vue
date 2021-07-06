@@ -21,14 +21,32 @@
 <script>
 	export default{
 		props:{
-			item:Object
+			item:Object,
+			type:{
+				type:String,
+				default:''
+			}
 		},
 		methods:{
 			// 跳转到详情
 			navTo() {
-				uni.navigateTo({
-					url:"../detail/detail?detail=" + JSON.stringify(this.item)
-				})
+				if(this.type)
+				{
+					uni.$emit('chooseTopic',{
+						id:this.item.id,
+						title:this.item.topicName
+						})
+					uni.navigateBack({
+						delta:1
+					})
+				}
+					
+				else{
+					uni.navigateTo({
+						url:"../detail/detail?detail=" + JSON.stringify(this.item)
+					})
+				}
+				
 			}
 		}
 	}

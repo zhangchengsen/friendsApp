@@ -1,6 +1,7 @@
 <script>
 	export default {
 		onLaunch: function() {
+			this.$store.commit('initStatus')
 			console.log('App Launch')
 			this.$U.onNetwork()
 			this.$U.update()

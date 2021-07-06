@@ -56,9 +56,24 @@
 		},
 		onLoad(e) {
 			this.msg = JSON.parse(e.detail)
+			uni.$on('changeSupportOrFollow',(e)=>{
+				switch (e.type) {
+					case 'follow':
+						this.follow(e.data.user_id)
+						break
+					default:
+						this.admire(e.data)
+						break;
+				}
+			})
 			this.getData()
-			console.log(this.msg)
+			
 		},
+		onUnload()
+		{
+			uni.$off('changeSupportOrFollow',((e)=>{}))
+		}
+		,
 		methods:{
 			changeTab(index){
 				this.activeIndex = index;
@@ -92,6 +107,7 @@
 			},
 			admire(e)
 			{
+				console.log(1111)
 				let support = this.list1[e.index].support		//指针
 				if(support.type == e.type) return 
 				else if(!support.type)
@@ -113,13 +129,23 @@
 				}
 				
 			},
-			follow(e) {
-				let obj = this.list1[e.index]		//指针
-				obj.follow = true
+			follow(user_id) {
+				this.list1.forEach((v)=>{
+					if(v.user_id === user_id)
+					{
+						v.follow = true
+					}
+				})
+				this.list2.forEach((v)=>{
+					if(v.user_id === user_id)
+					{
+						v.follow = true
+					}
+				})
 				uni.showToast({
 					title:"关注成功"
 				})
-			}, 
+			},
 			toLoad() {
 				let index = this.activeIndex +1
 				

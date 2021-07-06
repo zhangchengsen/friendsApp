@@ -41,8 +41,29 @@
 	import topics from "../../components/common/topics.vue"
 	import commonList from '../../components/common/common.vue'
 	export default {
+		onUnload()
+		{
+			if(this.type == "post")
+			uni.$off('changeSupportOrFollow',((e)=>{}))
+		}
+		,
+		mounted(){
+			if(this.type == "post")
+			{
+				uni.$on('changeSupportOrFollow',(e)=>{
+					switch (e.type) {
+						case 'follow':
+							this.follow(e.data.user_id)
+							break
+						default:
+							this.admire(e.data)
+							
+							break;
+					}
+				})
+			}
+		},
 		
-				
 		onLoad(e) {
 			this.type = e.type
 			let pageTitle = ''
@@ -113,7 +134,17 @@
 		}
 		,
 		methods:{
-			
+			follow(user_id) {
+				this.searchList.forEach((v)=>{
+					if(v.user_id === user_id)
+					{
+						v.follow = true
+					}
+				})
+				uni.showToast({
+					title:"关注成功"
+				})
+			},
 			 search () {
 				let isRefresh = this.inputVal == this.preSearch ? true : false
 				if(!isRefresh) this.page = 1

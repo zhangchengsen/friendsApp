@@ -26,6 +26,7 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	import commonList from '../../components/common/common.vue'
 	export default {
 		components:{
@@ -42,16 +43,62 @@
 				tabList:[]
 			}
 		},
-		
+		onShow()
+		{
+			if(this.change)
+			{
+				this.$store.commit('change')
+				this.getData()
+			}
+			let uid = uni.getStorageSync('uid')
+			if(uid) 
+			{
+				if(uid == 'pub') this.getData()
+				else {
+					this.newsList.forEach(item=>{
+						item.list.forEach((v)=>{
+							if(v.user_id === user_id)
+							{
+								v.follow = true
+							}
+						})
+					})
+				}
+				
+				uni.removeStorage({
+					key:'uid'
+				})
+			}
+			
+		},
 		onLoad() {
+			
 			let res = uni.getSystemInfo({
 				success: (res) => {
 					this.swiperH = res.windowHeight - uni.upx2px(100) - res.statusBarHeight 
 					
 				}
 			})
+			// 全局监听
+			uni.$on('changeSupportOrFollow',(e)=>{
+				switch (e.type) {
+					case 'follow':
+						this.follow(e.data.user_id)
+						break
+					case 'support' :
+						this.admire(e.data)
+						break;
+				}
+			})
+			
 			this.getData()
+			
 		},
+		onUnload()
+		{
+			uni.$off('changeSupportOrFollow',(e)=>{})
+		}
+		,
 		onNavigationBarSearchInputClicked() {
 			
 			uni.navigateTo({
@@ -60,11 +107,15 @@
 		},
 		onNavigationBarButtonTap(e) {
 			this.navigation('public')
-			// uni.navigateTo({
-			// 	url:'../public/public'
-			// })
+			
 		}
 		,	
+		computed:{
+			...mapState({
+				user:state=>state.user,
+				change:state=>state.change
+			})
+		},
 		methods: {
 			
 			async getData() {
@@ -116,8 +167,10 @@
 				this.changeTab(e.detail.current )
 			}
 			,
+			// 顶
 			admire(e)
 			{
+				console.log(e.type)
 				let support = this.newsList[this.activeIndex].list[e.index].support		//指针
 				if(support.type == e.type) return 
 				else if(!support.type)
@@ -140,7 +193,6 @@
 				
 			},
 			follow(user_id) {
-				console.log(user_id)
 				this.newsList.forEach(item=>{
 					item.list.forEach((v)=>{
 						if(v.user_id === user_id)

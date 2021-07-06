@@ -12,15 +12,17 @@
 			</view>
 		</common-list>
 		<template v-if ="remarkList.length > 0 ">
+		
 		<block v-for="(item,index) in remarkList" :key="index">
 			<!-- 消息组件 -->
 				
-				<cpn-msg-chat  :item = "item"  :preTime = " index ? remarkList[index - 1].create_time: 0  "></cpn-msg-chat>		
+				<cpn-msg-chat @tof="tof"  :item = "item"  :preTime = " index ? remarkList[index - 1].create_time: 0  "></cpn-msg-chat>		
 				<!--  -->
 		</block>
+		
 		</template>
-		<bottom-input @send = "send"></bottom-input>
-		<cpn-detail-share ref = "share"></cpn-detail-share>
+		<bottom-input :focus="focus" @send = "send"></bottom-input>
+		<cpn-detail-share  ref = "share"></cpn-detail-share>
 	</view>
 </template>
 
@@ -29,14 +31,30 @@
 	import bottomInput from '@/components/msg/bottom_input.vue'
 	import commonList from '@/components/common/common.vue'
 	import cpnDetailShare from '@/components/common/cpn-detail-share.vue'
+	import $T from '@/components/common/time.js'
 	export default{
 		onLoad(e) {
 			this.passageData = JSON.parse(e.data)
 			this.getDetail()
 			this.getComment()
 			this.setTtitle()
+			uni.$on('changeSupportOrFollow',(e)=>{
+				switch (e.type) {
+					case 'follow':
+						this.follow(e.data.user_id)
+						break
+					default:
+						this.admire(e.data)
+						break;
+				}
+			})
 			
 		},
+		onUnload()
+		{
+			uni.$off('changeSupportOrFollow',((e)=>{}))
+		}
+		,
 		components:{
 			commonList,
 			bottomInput,
@@ -51,7 +69,9 @@
 				inputVal:"",
 				remarkList:[],
 				imageList:[],
-				content:''
+				content:'',
+				focus:false,
+				replyId:0
 			}
 		},
 		onNavigationBarButtonTap(e) {
@@ -66,23 +86,45 @@
 		}
 		,
 		methods:{
+			tof(e){
+				this.focus = true
+				this.replyId = e
+			},
+			// 整理格式
+			__ArrSort(arr,id = 0){
+				var temp = [],lev=0;
+				var forFn = function(arr, id,lev){
+					for (var i = 0; i < arr.length; i++) {
+						var item = arr[i];
+						if (item.fid==id) {
+							item.lev=lev;
+							temp.push({
+								id:item.id,
+								fid:item.fid,
+								userid:item.user.id,
+								userpic:item.user.userpic,
+								username:item.user.username,
+								time:$T.gettime(item.create_time),
+								data:item.data,
+								type:'remark'
+							});
+							forFn(arr,item.id,lev+1);
+						}
+					}
+				};
+				forFn(arr, id,lev);
+				return temp;
+			},
 			async getDetail() {
 				let res = await this.$http.get('/post/' + this.passageData.id )
 				this.imageList = res.detail.images
 				this.content = res.detail.content
 			},
 			async getComment() {
-				let res = await this.$http.get('/post/' + this.passageData.id +'/comment' )
-				this.remarkList = res.list.map((v) =>{
-					return {
-						create_time:v.create_time,
-						data:v.data,
-						type:'remark',
-						uid:v.user_id,	//用户id
-						avatar:v.user.userpic,
-						username:v.user.username
-					}
-				})
+				this.$http.get('/post/' + this.passageData.id +'/comment' ).then(res=>{
+					this.remarkList = this.__ArrSort(res.list)
+				}).catch(err=>console.log(err.message))
+				
 			}
 			,
 			
@@ -96,22 +138,25 @@
 				           
 				        });
 				fail:(res)=>{
+				
 				}
 			},
 			// 发送评论
 			send(e) {
 				this.inputVal = e.inputVal
-				if(this.inputVal.trim() == '') return 
-				let obj = {
-					user_id:0,
-					avatar:'../../static/images/2.jpg',
-					username:'IT黑马',
-					type:'remark',
+				this.$http.post('/post/comment',{
+					fid:this.replyId,
 					data:this.inputVal,
-					create_time: Date.now()
-				}
-				this.remarkList.push(obj)
-				this.inputVal = ''
+					post_id:this.passageData.id
+				},{token:true}).then(res=>{
+					uni.showToast({
+						title:'评论成功'
+					})
+					this.getComment()
+					this.inputVal = ''
+				}).catch(err=>{
+					console.log(err)
+				})
 				
 			},
 			// 设置标题头
@@ -143,9 +188,8 @@
 				}
 				
 			},
-			follow(e) {
-				let obj = this.passageData		//指针
-				obj.follow = true
+			follow(user_id) {
+				this.passageData.follow = true
 				uni.showToast({
 					title:"关注成功"
 				})

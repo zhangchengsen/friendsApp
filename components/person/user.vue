@@ -12,7 +12,7 @@
 						{{user.username}}
 					</view>
 					<view class="font-md" style="color: #484742;margin-top: 5rpx;"  >
-						总帖子 1 今日发帖 0
+						总帖子 {{dataList[0].nums}} 今日发帖 {{dataList[1].nums}}
 					</view>
 				</view>
 				<view class="iconfont icon-jinru font-md">

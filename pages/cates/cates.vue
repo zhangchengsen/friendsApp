@@ -19,7 +19,7 @@
 						<scroll-view scroll-y="true"  :style=" 'height:' + swiperH +'px' " >
 							<template v-if="topicList[curIndex].list.length > 0">
 								<block v-for="(item1,index1) in topicList[index].list" :key = "index1">
-									<topics class="pl-2" :item= "item1"></topics>
+									<topics :type="type" class="pl-2" :item= "item1"></topics>
 								</block>
 								<loadMore :load = "topicList[curIndex].loadMore" ></loadMore>
 							</template>
@@ -124,7 +124,14 @@
 				this.getData()
 			}
 		},
-		onLoad() {
+		onLoad(e) {
+			if(e.type) 
+			{
+				this.type = e.type
+				uni.setNavigationBarTitle({
+					title:"选择话题"
+				})
+			}
 			this.getClass()
 			let res = uni.getSystemInfo({
 				success: (res) => {
@@ -142,7 +149,8 @@
 				loadMore:'上拉加载更多',
 				tabList:[
 					
-				]
+				],
+				type:''
 			}
 		},
 		onReachBottom() {

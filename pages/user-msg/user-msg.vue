@@ -1,5 +1,5 @@
 <template>
-	<view class="m-1">
+	<view class="m-3">
 		<!-- 导航头部 -->
 		<uni-nav-bar style="height: 100rpx;" class="">
 			<text slot="left" class="iconfont icon-fanhui text-center "  @click="navBack"></text>
@@ -9,7 +9,7 @@
 			<text slot = "right" class="iconfont icon-geren"></text>
 		</uni-nav-bar>
 		<!-- scroll消息内容 -->
-		<scroll-view scroll-y="true"  class="" style="position: absolute;top: 100rpx;left: 0;right: 0;bottom: 100rpx;" scroll-with-animation="true" :scroll-into-view="scrollInto">
+		<scroll-view scroll-y="true"   class="mt-1" style="position: absolute;top: 100rpx;left: 0;right: 0;bottom: 100rpx;" scroll-with-animation="true" :scroll-into-view="scrollInto">
 			<block v-for="(item,index) in chatList" :key="index">
 				<!-- 消息组件 -->
 				<view :id = '"tab" + index'>
@@ -38,6 +38,32 @@
 		onLoad(e)
 		{
 			console.log(e)
+			if(!e.user){
+				uni.navigateBack({
+					delta:1
+				});
+				return uni.showToast({
+					title:'聊天对象不存在',
+					icon:'none'
+				})
+			}
+			let ToUser = JSON.parse(e.user)
+			//  创建聊天对象
+			this.$store.commit('createToUser',ToUser)
+			// 获取当前用户的聊天记录
+			this.$store.dispatch('getChatDetailToUser').then(list=>{
+				console.log(list)
+				this.chatList = list
+			})
+			uni.$on('UserChat',(res)=>{
+				console.log('user-msg对话页 接受到聊天信息',res)
+				if(res.from_id == ToUser.user_id){
+					this.renderPage({
+						data:res,
+						send:false
+					})
+				}
+			})
 			uni.getSystemInfo({
 				success:(res)=>{
 					this.scrollH = res.windowHeight - uni.upx2px(160) - 44
@@ -47,6 +73,14 @@
 			this.getData()
 			this.toButtom()
 		},
+		mounted() {
+			this.toButtom()
+		},
+		beforeDestroy(){
+			this.$store.commit('closeToUser')
+			uni.$off('UserChat',()=>{})
+		}
+		,
 		data() {
 			return {
 				inputVal:'',
@@ -55,30 +89,42 @@
 			}
 		},
 		methods:{
+			// 渲染
+			renderPage(e) {
+				this.$store.dispatch('formatChatDetailObject',e).then(msg=>{
+					this.chatList.push(msg)
+					this.toButtom()
+				}).catch(err=>{
+					console.log('user-msg $on',err.message)
+				})
+			},
 			// 滚动
 			toButtom() {
 				setTimeout(()=>{
 					if(this.chatList.length < 1) return
 					this.scrollInto = 'tab' + (this.chatList.length - 1)
-					console.log(this.scrollInto)
 				},600)
 				
 			},
 			// 发送信息
-			send(e) {
+			async send(e) {
 				this.inputVal = e.inputVal
 				if(this.inputVal.trim() == '') return 
-				let obj = {
-					user_id:1,
-					avatar:'../../static/images/2.jpg',
-					username:'IT黑马',
-					type:'text',
+				let result = await this.$store.dispatch('sendChatMessage',{
 					data:this.inputVal,
-					create_time: Date.now()
-				}
-				this.chatList.push(obj)
+					type:'text'
+				}) 
+				this.$http.post('/chat/send',result,{
+					token:true
+				}).then(res=>{
+					this.renderPage({
+						data:result,
+						send:true
+					})
+				})
+				// this.chatList.push(obj)
 				this.inputVal = ''
-				this.toButtom()
+				// this.toButtom()
 			}
 			,
 			// 返回

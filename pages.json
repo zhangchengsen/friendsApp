@@ -298,7 +298,45 @@
 					"titleNView":{}
 				}
 			}
+		},
+		{
+			"path": "pages/history/history",
+			"style": {
+				"navigationBarTitleText":"历史记录",
+				"app-plus":
+				{
+					"titleNView":{
+						"buttons":[
+						{
+							"type":"menu",
+							"float":"right"
+						}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/problems/problems",
+			"style": {
+				"navigationBarTitleText":"问题汇总",
+				"app-plus":
+				{
+					"titleNView":{}
+				}
+			}
+		},
+		{
+			"path": "pages/support/support",
+			"style": {
+				"navigationBarTitleText":"支持我们",
+				"app-plus":
+				{
+					"titleNView":{}
+				}
+			}
 		}
+		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "uni-nav-bar": "/static/uni-components/uni-nav-bar/uni-nav-bar",
+    "cpn-msg-chat": "/components/msg/cpn-msg-chat",
+    "bottom-input": "/components/msg/bottom_input"
+  }
+}

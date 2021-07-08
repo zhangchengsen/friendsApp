@@ -4,7 +4,27 @@
     "pages/my/my",
     "pages/msg/msg",
     "pages/news/news",
-    "pages/search/search"
+    "pages/search/search",
+    "pages/public/public",
+    "pages/cates/cates",
+    "pages/detail/detail",
+    "pages/user-list/user-list",
+    "pages/user-msg/user-msg",
+    "pages/common_detail/common_detail",
+    "pages/user-set/user-set",
+    "pages/changePwd/changePwd",
+    "pages/email/email",
+    "pages/userInfo/userInfo",
+    "pages/suggest/suggest",
+    "pages/about/about",
+    "pages/login/login",
+    "pages/zone/zone",
+    "pages/user-safe/user-safe",
+    "pages/phone/phone",
+    "pages/password/password",
+    "pages/history/history",
+    "pages/problems/problems",
+    "pages/support/support"
   ],
   "subPackages": [],
   "window": {
@@ -47,6 +67,7 @@
   "usingComponents": {
     "divider": "/components/common/divider",
     "load-more": "/components/common/load_more",
-    "nothing": "/components/common/nothing"
+    "nothing": "/components/common/nothing",
+    "upload-image": "/components/common/upload_img"
   }
 }

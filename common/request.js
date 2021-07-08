@@ -27,12 +27,13 @@ export default {
 				...options,
 				success: (res) => {
 					if(options.native) return resolve(res)
-					if(res.statusCode != 200)
+					if(res.statusCode != 200 && !options.notoast)
 					{
 						uni.showToast({
 							icon:'none',
 							title:res.data.msg || '请求失败'
 						})
+						
 						return reject(res.data)
 					}
 					return resolve(res.data.data || res)

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "个人资料",
+  "usingComponents": {
+    "uni-list-item": "/uni_modules/uni-list/components/uni-list-item/uni-list-item",
+    "city-picker": "/components/mpvue-citypicker/mpvueCityPicker"
+  }
+}

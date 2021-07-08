@@ -25,13 +25,30 @@
 			}
 		},
 		onLoad() {
+			this.dataList = [
+				{
+					name:'帖子',
+					nums:0
+				},
+				{
+					name:'动态',
+					nums:0
+				},
+				{
+					name:'评测',
+					nums:0
+				},
+				{
+					name:'粉丝',
+					nums:0
+				}
+			]
 		},
-		mounted(){
+		onShow()
+		{
 			if(this.user) this.getDataList()
-		},
-		methods:{
-			getDataList() {
-				 this.dataList = [
+			else {
+				this.dataList = [
 					{
 						name:'帖子',
 						nums:0
@@ -49,17 +66,20 @@
 						nums:0
 					}
 				]
+			}
+		},
+		methods:{
+			getDataList() {
+				 
 				this.$http.get('/user/getcounts/'+this.user.id,{},{
 					token:true,
 					native:true
 				}).then(res=>{
-					console.log(res)
 					this.dataList[0].nums = res.data.data.post_count
 					this.dataList[1].nums = res.data.data.today_posts_count
 					this.dataList[2].nums = res.data.data.comments_count
 					this.dataList[3].nums = res.data.data.withfollow_count
 					
-					console.log(this.dataList)
 					
 				}).catch(err=>{
 					console.log(err.message)

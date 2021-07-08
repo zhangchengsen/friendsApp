@@ -1,3 +1,8 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "nav-bar": "/static/uni-components/uni-nav-bar/uni-nav-bar",
+    "cates": "/components/common/cate",
+    "common-list": "/components/common/common",
+    "topics": "/components/common/topics"
+  }
 }

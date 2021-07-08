@@ -19,16 +19,27 @@ Vue.component('nothing',nothing)
 Vue.component('uploadImage',upload_image)
 App.mpType = 'app'
 //vuex封装验证
-Vue.prototype.checkAuth = (callback)=>{
+Vue.prototype.checkAuth = (callback,checkPhone = true)=>{
 	if(!store.state.loginStatus)
 	{
 		return uni.navigateTo({
 			url:'/pages/login/login'
 		})
 	}
+	if(checkPhone && !store.state.user.phone)
+	{
+		uni.showToast({
+			icon:'none',
+			title:'请先绑定手机号'
+		})
+		uni.navigateTo({
+			url:'/pages/phone/phone'
+		})
+		
+	}
 	callback()
 }
-Vue.prototype.navigation = (opt)=>{
+Vue.prototype.navigation = (opt,checkPhone = true)=>{
 	if(!store.state.loginStatus)
 	{
 		return uni.navigateTo({

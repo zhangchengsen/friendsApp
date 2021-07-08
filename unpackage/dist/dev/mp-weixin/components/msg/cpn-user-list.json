@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "uni-badge": "/static/uni-components/uni-badge/uni-badge",
+    "cpn-cpn": "/components/msg/cpn-user-list-cpn"
+  }
+}

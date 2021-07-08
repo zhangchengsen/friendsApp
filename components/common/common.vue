@@ -4,7 +4,7 @@
 		<view class="" @click.stop="navTo(item)">
 			<view class="user">
 				<view class="img_u" >
-						<image :src="item.user_pic"  @click.stop="toZone"></image>
+						<image :src="item.user_pic"  @click.stop="toZone(item.user_id)"></image>
 					<view class="name_time">
 						<view class="name">
 							{{item.username}}
@@ -14,11 +14,14 @@
 						</view>
 					</view>
 				</view>
-				<view v-if = "!item.follow"  class="button animated animate__fast" hover-class="pulse" @click.stop = "follow(item,index)">
+				<view v-if = "!item.follow && (user.id != item.user_id) && type != 'his' "  class="button animated animate__fast" hover-class="pulse" @click.stop = "follow(item,index)">
 					关注
 				</view>
-				<view v-else style="color:#FFFFFF">
-					关注
+				<view v-else >
+					
+					<view class="" style="color:#FFFFFF">
+						关注
+					</view>
 				</view>
 			</view>
 			<!-- 上部分 -->
@@ -31,6 +34,7 @@
 				</slot>
 			</view>
 			<!-- 文字图标 -->
+			<template v-if = "type != 'his'">
 			<view class="flex m-2">
 				<!-- 支持 -->
 				<view class="flex flex-1 justify-center p-1 animated" hover-class="rubberBand" @click.stop="operation(item,'support',index)" :style=" item.support.type == 'support' ? 'color:pink;' : ''   ">
@@ -52,6 +56,7 @@
 				</view>
 				
 			</view>
+			</template>
 		</view>
 		
 		<divider></divider>
@@ -61,6 +66,7 @@
 
 <script>
 	import $T from './time.js'
+	import {mapState} from 'vuex'
 	export default {
 		
 		filters:{
@@ -78,13 +84,41 @@
 			}
 		},
 		mounted() {
+			let his = uni.getStorageSync('browser') || JSON.stringify([])
+			let data = []
+			if(his) data =  JSON.parse(his)
+			// let history = JSON.parse(his) 
 			
+			this.userList.forEach(v=>{
+				let index = data.findIndex(item=>{
+					return item.id == v.id
+				})
+				if(index != -1) data.splice(index,1)
+				data.unshift(v)
+			})
+			// uni.setStorageSync('browser',JSON.stringify(data))
+			uni.setStorage({
+				key:'browser',
+				data:JSON.stringify(data),
+				success: () => {
+					console.log(1)
+				},
+				fail: (err) => {
+					console.log(err)
+				}
+			})
+			
+		},
+		computed:{
+			...mapState({
+				user:state=>state.user,
+			})
 		},
 		methods: {
 			// 到个人空间
-			toZone() {
+			toZone(id) {
 				uni.navigateTo({
-					url:'../../pages/zone/zone'
+					url:'../../pages/zone/zone?uid='+id	
 				})
 			},
 			// 到详情页
@@ -102,6 +136,8 @@
 					follow_id:item.user_id
 				},{token:true})
 				.then(res=>{
+					uni.setStorageSync('followed','1')
+					console.log(23)
 					uni.$emit('changeSupportOrFollow',{
 						type:"follow",
 						data:{

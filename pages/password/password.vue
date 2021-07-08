@@ -66,7 +66,7 @@
 			return {
 				password:"",
 				exactPwd:"",
-				oldPwd:" "
+				oldPwd:"."
 			}
 		}
 		

@@ -52,6 +52,7 @@
 					confirmText:'确定',
 					success:(res)=>{
 						if(res.confirm)	this.$store.commit('logOut')
+						this.$store.dispatch('closeSocket')
 					}
 				})
 			},

@@ -23,7 +23,10 @@
 		</template>
 		<template v-if="type == 'user' ">
 			<block v-for="(item,index) in  searchList">
-				<cpn-cpn :item1="item"></cpn-cpn>
+				<view class=""  @click.stop = "clickCpn(item.id)">
+					<cpn-cpn :item1="item" type = "search"></cpn-cpn>
+				</view>
+				
 			</block>
 		</template>
 		<template v-if="type == 'topic' ">
@@ -32,7 +35,7 @@
 			</block>
 		</template>
 		<loadMore :load ="loadMore" v-if='searchList.length > 0'></loadMore>
-		<nothing v-if="nothing"></nothing>
+		<nothing v-if="searchList.length == 0 && haveSearched"></nothing>
 	</view>
 </template>
 
@@ -95,7 +98,7 @@
 				demoU:[],
 				demoT:[],
 				type:'',
-				
+				haveSearched:false,
 				inputVal:"",
 				searchList:[],
 				page:1,
@@ -147,6 +150,7 @@
 			},
 			 search () {
 				let isRefresh = this.inputVal == this.preSearch ? true : false
+				this.haveSearched = true
 				if(!isRefresh) this.page = 1
 				let type = this.type
 				this.$http.post(`/search/${type}`,{
@@ -177,14 +181,16 @@
 					{
 						list = res.list.map(v=>{
 							return {
-									avatar:"/static/images/4.jpg",
-									sex:1,
-									username:'ymtx',
-									age:18,
-									isFollow:true
+									id:v.id,
+									avatar:v.userpic,
+									sex:v.userinfo.sex,
+									username:v.username,
+									age:v.userinfo.age ? v.userinfo.age : 0 ,
+									isFollow:false
 									}
 						})
 					}
+					
 					if(!isRefresh) 
 					{
 						this.historyList = this.historyList.filter(v=> {
@@ -217,8 +223,15 @@
 				    //	拿到数据之后隐藏
 				this.inputVal = item
 				this.search()                                   
+			},
+			clickCpn(id)
+			{
 				
+				uni.navigateTo({
+					url:'../zone/zone?uid=' + id
+				})
 			}
+			
 		},
 		
 	}

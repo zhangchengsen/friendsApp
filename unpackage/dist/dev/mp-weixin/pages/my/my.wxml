@@ -1,1 +1,1 @@
-<view>我的</view>
+<view><user class="p-2" vue-id="704e9d00-1" dataList="{{dataList}}" bind:__l="__l"></user><list vue-id="704e9d00-2" bind:__l="__l"></list></view>

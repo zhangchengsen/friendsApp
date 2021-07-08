@@ -102,7 +102,6 @@
 					birthday:this.birthday,
 					path:this.pickerText
 				}
-				console.log(obj)
 				this.$http.post('/edituserinfo',obj,{
 					token:true
 				}).then(res=>{
@@ -132,10 +131,12 @@
 							name:'userpic',
 							token:true
 						}).then(result=>{
+							
 							this.$store.commit('editUserInfo',{
 								key:"userpic",
 								value:result.data
 							})
+							uni.setStorageSync('changeMes','userInfo')
 							uni.showToast({
 								title:'修改成功'
 							})

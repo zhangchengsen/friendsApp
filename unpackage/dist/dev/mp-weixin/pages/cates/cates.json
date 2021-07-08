@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "nav-bar": "/static/uni-components/uni-nav-bar/uni-nav-bar",
+    "topics": "/components/common/topics"
+  }
+}

@@ -1,1 +1,1 @@
-<view>消息提醒</view>
+<view><block wx:if="{{list.length>0}}"><block wx:for="{{list}}" wx:for-item="item" wx:for-index="index" wx:key="index"><block><msg-list vue-id="{{'353d4f88-1-'+index}}" item="{{item}}" bind:__l="__l"></msg-list></block></block></block><block wx:else><nothing vue-id="353d4f88-2" bind:__l="__l"></nothing><view class="text-center mt-2">点击他人头像 点击右上角 就能开启和他人的聊天啦</view><view class="text-center mt-2">同时在线 更可开启实时聊天</view></block></view>

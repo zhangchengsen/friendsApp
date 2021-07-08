@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "uni-notice-bar": "/uni_modules/uni-notice-bar/components/uni-notice-bar/uni-notice-bar",
+    "nav-bar": "/static/uni-components/uni-nav-bar/uni-nav-bar"
+  }
+}

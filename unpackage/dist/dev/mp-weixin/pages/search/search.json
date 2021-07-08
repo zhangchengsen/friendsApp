@@ -1,5 +1,7 @@
 {
   "usingComponents": {
-    "common-list": "/components/common/common"
+    "common-list": "/components/common/common",
+    "cpn-cpn": "/components/msg/cpn-user-list-cpn",
+    "topics": "/components/common/topics"
   }
 }

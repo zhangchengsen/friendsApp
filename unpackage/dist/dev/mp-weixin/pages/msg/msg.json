@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText": "消息列表",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "msg-list": "/components/common/msgList"
+  }
 }

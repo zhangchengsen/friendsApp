@@ -38,12 +38,13 @@
 				</view>
 			</view>
 		</view>
-		
+		<uni-notice-bar v-if="!user.phone" single="true" scrollable text="发布图片和发布都必须绑定手机号码哦~"></uni-notice-bar>
 	</view>
 	
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	import navBar from "../../static/uni-components/uni-nav-bar/uni-nav-bar.vue"
 	const Arr = ['仅自己可见','所有人可见']
 	export default{
@@ -71,6 +72,9 @@
 			navBar
 		},
 		computed:{
+			...mapState({
+				user:state=>state.user
+			}),
 			imageId()
 			{
 				return this.imageList.map(item=>{

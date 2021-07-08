@@ -1,8 +1,8 @@
 <template>
-	<view class="mx-2 py-2 flex border-bottom">
-		<view class="" @click="navTo(item)">
+	<view class="mx-2 py-2 flex border-bottom" @click="navTo(item)">
+		<view class="" >
 			<image :src="item.avatar" style="width: 80rpx;height: 80rpx;border-radius: 50%;" class=""></image>
-		</view>
+		</view> 
 		<view class="flex justify-between w-100 flex-column">
 			<!-- -->
 				<view class="flex flex-row justify-between w-100">
@@ -42,8 +42,16 @@
 		methods:{
 			navTo(item)
 			{
+				let user = {
+					user_id:this.item.user_id,
+					username:this.item.username,
+					userpic:this.item.avatar
+				}
 				uni.navigateTo({
-					url:'../../pages/user-msg/user-msg'
+					url:'../../pages/user-msg/user-msg?user='+JSON.stringify(user),
+					success: () => {
+						this.$store.dispatch('readChatMessage',item)
+					}
 				})
 			}
 		}

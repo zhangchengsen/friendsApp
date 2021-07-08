@@ -21,7 +21,7 @@
 		</block>
 		
 		</template>
-		<bottom-input :focus="focus" @send = "send"></bottom-input>
+		<bottom-input @toBlur ="toBlur" :focus="focus" @send = "send"></bottom-input>
 		<cpn-detail-share  ref = "share"></cpn-detail-share>
 	</view>
 </template>
@@ -86,6 +86,9 @@
 		}
 		,
 		methods:{
+			toBlur(){
+				this.focus = false
+			},
 			tof(e){
 				this.focus = true
 				this.replyId = e
@@ -143,20 +146,24 @@
 			},
 			// 发送评论
 			send(e) {
-				this.inputVal = e.inputVal
-				this.$http.post('/post/comment',{
-					fid:this.replyId,
-					data:this.inputVal,
-					post_id:this.passageData.id
-				},{token:true}).then(res=>{
-					uni.showToast({
-						title:'评论成功'
+				this.checkAuth(()=>{
+					this.inputVal = e.inputVal
+					this.$http.post('/post/comment',{
+						fid:this.replyId,
+						data:this.inputVal,
+						post_id:this.passageData.id
+					},{token:true}).then(res=>{
+						uni.showToast({
+							title:'评论成功'
+						})
+						this.getComment()
+						this.inputVal = ''
+						uni.$emit('addRemark',{id:this.passageData.id})
+					}).catch(err=>{
+						console.log(err)
 					})
-					this.getComment()
-					this.inputVal = ''
-				}).catch(err=>{
-					console.log(err)
 				})
+				
 				
 			},
 			// 设置标题头

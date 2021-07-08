@@ -475,7 +475,6 @@ radio-group label, checkbox-group label{
 	content: '';
 	-webkit-transform: scaleY(.5);
 	transform: scaleY(.5);
-	background-color: #c8c7cc;
 }
 .uni-list .uni-list-cell:last-child::after {
 	height: 0rpx;
@@ -2549,5 +2548,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 
-/*每个页面公共css */
+	/*每个页面公共css */
+/* 	::-webkit-scrollbar{
+		display: none;
+	} */
 

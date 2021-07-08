@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText": "我的",
+  "usingComponents": {
+    "user": "/components/person/user",
+    "list": "/components/person/list"
+  }
 }

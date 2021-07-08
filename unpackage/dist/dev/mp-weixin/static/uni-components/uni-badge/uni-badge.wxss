@@ -1,0 +1,90 @@
+
+.uni-badge--x.data-v-62530ae4 {
+
+
+
+
+
+	display: inline-block;
+
+	position: relative;
+}
+.uni-badge--absolute.data-v-62530ae4 {
+	position: absolute;
+}
+.uni-badge.data-v-62530ae4 {
+
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	overflow: hidden;
+	box-sizing: border-box;
+
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	        flex-direction: row;
+	height: 20px;
+	line-height: 16px;
+	color: #333;
+	border-radius: 100px;
+	background-color: #f1f1f1;
+	background-color: transparent;
+	text-align: center;
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	font-size: 12px;
+}
+.uni-badge--inverted.data-v-62530ae4 {
+	padding: 0 5px 0 0;
+	color: #f1f1f1;
+}
+.uni-badge--default.data-v-62530ae4 {
+	color: #333;
+	background-color: #f1f1f1;
+}
+.uni-badge--default-inverted.data-v-62530ae4 {
+	color: #999;
+	background-color: transparent;
+}
+.uni-badge--primary.data-v-62530ae4 {
+	color: #fff;
+	background-color: #007aff;
+}
+.uni-badge--primary-inverted.data-v-62530ae4 {
+	color: #007aff;
+	background-color: transparent;
+}
+.uni-badge--success.data-v-62530ae4 {
+	color: #fff;
+	background-color: #4cd964;
+}
+.uni-badge--success-inverted.data-v-62530ae4 {
+	color: #4cd964;
+	background-color: transparent;
+}
+.uni-badge--warning.data-v-62530ae4 {
+	color: #fff;
+	background-color: #f0ad4e;
+}
+.uni-badge--warning-inverted.data-v-62530ae4 {
+	color: #f0ad4e;
+	background-color: transparent;
+}
+.uni-badge--error.data-v-62530ae4 {
+	color: #fff;
+	background-color: #dd524d;
+}
+.uni-badge--error-inverted.data-v-62530ae4 {
+	color: #dd524d;
+	background-color: transparent;
+}
+.uni-badge--small.data-v-62530ae4 {
+	-webkit-transform: scale(0.8);
+	        transform: scale(0.8);
+	-webkit-transform-origin: center center;
+	        transform-origin: center center;
+}
+

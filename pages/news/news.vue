@@ -15,8 +15,14 @@
 			<swiper :current = "currentTab" @change = "swiperChange" :style=" 'height:' +scrollH +'px'  ">
 					<swiper-item>
 					<scroll-view  @scrolltolower="toLoadMore(0)" scroll-y="true" :style=" 'height:' +scrollH +'px'" >
-							<common-list :userList="newsList[0].list" @admire="admire" ></common-list>
-							<loadMore :load = "newsList[0].loadMore"></loadMore>
+							<template v-if="newsList[0].list.length > 0">
+								<common-list :userList="newsList[0].list" @admire="admire" ></common-list>
+								<loadMore :load = "newsList[0].loadMore"></loadMore>
+							</template>
+							<template v-else>
+								<nothing></nothing>
+								<view class="text-center">是没关注别人还是关注的人没有发动态呢。。。</view>
+							</template>
 					</scroll-view>
 						
 					</swiper-item>
@@ -100,12 +106,25 @@
 			commonList,
 			topics
 		},
+		onShow()
+		{
+			let data = uni.getStorageSync('followed')
+			if(data)
+			{
+				this.getList()
+				uni.removeStorage({
+					key:'followed'
+				})
+			}
+		}
+		,
 		mounted() {
 			let res = uni.getSystemInfo({
 				success: (res) => {
 					this.scrollH = res.windowHeight - res.statusBarHeight -44 
 				}
 			})
+			
 			uni.$on('changeSupportOrFollow',(e)=>{
 				switch (e.type) {
 					case 'follow':
@@ -116,11 +135,21 @@
 						break;
 				}
 			})
+			uni.$on('addRemark',(e)=>{
+				this.newsList[0].list.forEach(item=>{
+					if(item.id == e.id)
+					{
+							item.remark_num += 1
+							return
+					}
+				})
+			})
 			
 		},
 		onUnload()
 		{
 			uni.$off('changeSupportOrFollow')
+			uni.$off('addRemark')
 		}
 		,
 		methods:{
@@ -153,19 +182,26 @@
 				}).catch(err=>{console.log(err.message)})
 			},
 
-			async getList() {
+			 getList() {
 				
 				let index = 0
-				let id = 2
 				let page = this.newsList[index].page
 				let isRefresh = page == 1 
-				let msg = await  this.$http.get('/postclass/'+ id +'/post/'+ page )
-				let list = msg.list.map(v=>{
-					return this.$U.helper(v)
+				this.$http.get('/followpost/'+ page,{},{
+					token:true,
+					notoast:true
+				}).then(msg=>{
+					let list = msg.list.map(v=>{
+						return this.$U.helper(v)
+					})
+					this.newsList[index].list = isRefresh? list : [...this.newsList[index].list,...list],
+					this.newsList[index].firstLoad = true 
+					this.newsList[index].loadMore = list.length < 10 ? '没有更多了' : '上拉加载更多'
+				}).catch(err=>{
+					page--
+					console.log(err.message)
 				})
-				this.newsList[index].list = isRefresh? list : [...this.newsList[index].list,...list],
-				this.newsList[index].firstLoad = true 
-				this.newsList[index].loadMore = list.length < 10 ? '没有更多了' : '上拉加载更多'
+				
 				 
 			},
 			// 改变tab栏
@@ -179,7 +215,7 @@
 			},
 			admire(e)
 			{
-				let support = this.newsList[this.currentTab].list[e.index].support		//指针
+				let support = this.newsList[0].list[e.index].support		//指针
 				if(support.type == e.type) return 
 				else if(!support.type)
 				{
@@ -217,10 +253,8 @@
 				let item = this.newsList[index]
 				if(item.loadMore == "没有更多了") return
 				item.loadMore = '加载中...'
-				setTimeout(()=>{
-					item.list = [...item.list,...item.list]
-					item.loadMore = "下拉加载更多"
-				},1500)
+				item.page ++
+				this.getList()
 			},
 			public() {
 				uni.navigateTo({

@@ -19,10 +19,10 @@
 			</view>
 			<view class="flex align-center justify-center m-4">
 				<view class="" @click="changeStatus" style="color: #3d7275;">
-					<text>(推荐)</text>验证码登录
+					<text style="color: #F56C6C;">(推荐)</text>验证码快速登录
 				</view>
 				<text class="m-1">丨</text>
-				<view class="" style="color: #3d7275;">
+				<view class="" style="color: #3d7275;" @click="toProblems">
 					登录遇到问题
 				</view>
 			</view>
@@ -50,7 +50,7 @@
 					其他登录方式
 				</view>
 				<text class="m-1">丨</text>
-				<view class="" style="color: #3d7275;">
+				<view class="" style="color: #3d7275;" @click="toProblems">
 					登录遇到问题
 				</view>
 			</view>
@@ -88,6 +88,13 @@
 			})
 		},
 		methods:{
+			//登录遇到问题
+			toProblems()
+			{
+				uni.navigateTo({
+					url:'../problems/problems'
+				})
+			},
 			goBack() {
 				uni.navigateBack({
 					delta:1
@@ -109,7 +116,8 @@
 						username:this.username,
 						password:this.password
 					}).then(res=>{
-						console.log(res)
+						this.$store.commit('changeLoginStatus',res)
+						this.$store.dispatch('openSocket')
 					}).catch(err=>{console.log(err.message)})
 				}
 				else
@@ -120,12 +128,13 @@
 					}).then(res=>{
 						
 						this.$store.commit('changeLoginStatus',res)
-						setTimeout(()=>{
-							uni.navigateBack({
-								delta:1
-							})
-						},1700)
-						
+						this.$store.dispatch('openSocket')
+						uni.navigateBack({
+							delta:1
+						})
+						uni.showToast({
+							title:'登录成功'
+						})
 						
 					}).catch(err=>{console.log(err)})
 				}

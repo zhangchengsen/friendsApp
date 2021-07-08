@@ -90,13 +90,22 @@
 						break;
 				}
 			})
-			
+			uni.$on('addRemark',(e)=>{
+				this.newsList[this.activeIndex].list.forEach(item=>{
+					if(item.id == e.id)
+					{
+							item.remark_num += 1
+							return
+					}
+				})
+			})
 			this.getData()
 			
 		},
 		onUnload()
 		{
 			uni.$off('changeSupportOrFollow',(e)=>{})
+			uni.$off('addRemark',(e)=>{})
 		}
 		,
 		onNavigationBarSearchInputClicked() {
@@ -144,7 +153,6 @@
 				let page = this.newsList[index].page
 				let isRefresh = page == 1 
 				let msg = await  this.$http.get('/postclass/'+ id +'/post/'+ page )
-				console.log(msg)
 				let list = msg.list.map(v=>{
 					return this.$U.helper(v)
 				})
@@ -170,7 +178,6 @@
 			// 顶
 			admire(e)
 			{
-				console.log(e.type)
 				let support = this.newsList[this.activeIndex].list[e.index].support		//指针
 				if(support.type == e.type) return 
 				else if(!support.type)

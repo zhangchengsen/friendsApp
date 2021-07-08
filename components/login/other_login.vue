@@ -65,7 +65,6 @@
 							bgColor:bgColor
 						}
 					});
-					console.log(this.providerList);
 				},
 				fail: (error) => {
 					console.log('获取登录通道失败', error);
@@ -95,7 +94,7 @@
 						   code:res.code
 					   }).then(res2=>{
 						   // 修改vuex的state,持久化存储
-						   this.$store.commit('login',this.$U.formatUserinfo(res2))
+						   this.$store.commit('changeLoginStatus',this.$U.formatUserinfo(res2))
 						   // 返回上一页
 						   if(this.back){
 						   	uni.navigateBack({
@@ -144,6 +143,7 @@
 				.then(res=>{
 					// 修改vuex的state,持久化存储
 					this.$store.commit('changeLoginStatus',this.$U.formatUserinfo(res))
+					this.$store.dispatch('openSocket')
 					// 返回上一页
 						uni.navigateBack({
 							delta: 1

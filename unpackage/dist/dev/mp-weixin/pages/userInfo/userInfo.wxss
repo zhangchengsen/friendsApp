@@ -1,0 +1,6 @@
+
+.picker {
+	color: rgb(1, 1, 1);
+	font-size: 28rpx;
+}
+

@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "cpn-user-list": "/components/msg/cpn-user-list"
+  }
+}

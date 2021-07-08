@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "detail": "/components/common/detail_topic",
+    "common-list": "/components/common/common"
+  }
+}

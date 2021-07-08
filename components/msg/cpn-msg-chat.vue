@@ -4,13 +4,13 @@
 		<view class="flex align-center justify-center" v-if = "item.type != 'remark' " >
 			{{getTime}}
 		</view>
-		<view class="flex m-2 p-1" :class="item.user_id ? 'flex-row-reverse' : '' ">
+		<view class="flex m-2 p-1" :class="isSelf ? 'flex-row-reverse' : '' ">
 			<view class="">
-				<image   style="width: 100rpx;height: 100rpx;border-radius: 50%;background-color: #d8d8d8;"  :src="item.avatar ? item.avatar : item.userpic"></image>
+				<image :style=" item.fid ? 'margin-left:110rpx;' : '' "  style="width: 100rpx;height: 100rpx;border-radius: 50%;background-color: #d8d8d8;"  :src="item.avatar ? item.avatar : item.userpic" class="bg-secondary"></image>
 			</view>
 			<view class="rounded mx-2"  >
 				<block v-if="item.type =='remark'">
-					<view :class="item.fid ? 'bg-light rounded p-2' : '' " @click="focus(item.id)">
+					<view :class="item.fid ? 'bg-light rounded p-2 ' : '' " @click="focus(item.id)" >
 						<view class="my-1 ml-2" >
 							{{item.username }}
 						</view>
@@ -71,6 +71,11 @@
 				if(this.item.type == 'remark') return 
 				return $T.getChatTime(this.item.create_time,this.preTime)
 			},
+			isSelf() {
+				if(this.type == 'remark') return false
+				let myId = this.$store.state.user.id
+				return myId == this.item.user_id
+			}
 			
 		},
 		mounted() {

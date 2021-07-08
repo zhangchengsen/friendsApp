@@ -1,7 +1,7 @@
 <script>
 	export default {
 		onLaunch: function() {
-			this.$store.commit('initStatus')
+			this.$store.dispatch('initUser')
 			console.log('App Launch')
 			this.$U.onNetwork()
 			this.$U.update()
@@ -22,4 +22,7 @@
 	@import "./static/free.css"
 
 	/*每个页面公共css */
+/* 	::-webkit-scrollbar{
+		display: none;
+	} */
 </style>

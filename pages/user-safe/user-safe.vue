@@ -18,6 +18,11 @@
 	export default {
 			methods:{
 				toChange(item) {
+					if(item.to == "phone" && this.user.phone)
+					return uni.showToast({
+						icon:'none',
+						title:"您已经绑定过手机啦"
+					})
 					if(item.to == 'weixin' || item.to == 'weibo' || item.to =='qq') 
 					{
 						if(item.data != '未绑定') return 
